@@ -11,30 +11,31 @@ const ROOM_IMAGE_BY_PATIENT = {
 
 const ROOM_HOTSPOT_COORDINATES = {
   default: {
-    patient: { yaw: -24, pitch: -7 },
-    chart: { yaw: 31, pitch: -8 },
-    monitor: { yaw: 46, pitch: 10 },
-    sink: { yaw: 73, pitch: -11 },
-    bulletin: { yaw: -54, pitch: 13 },
-    environment: { yaw: -82, pitch: -10 },
+    patient: { yaw: 0, pitch: -6 },
+    chart: { yaw: 105, pitch: -8 },
+    monitor: { yaw: 18, pitch: 8 },
+    sink: { yaw: 58, pitch: -5 },
+    bulletin: { yaw: -82, pitch: 6 },
+    environment: { yaw: -42, pitch: -5 },
   },
   1: {
-    environment: { yaw: -88, pitch: -8 },
+    patient: { yaw: 6, pitch: -5 },
+    chart: { yaw: 96, pitch: -8 },
   },
   2: {
-    chart: { yaw: 28, pitch: -7 },
+    environment: { yaw: -36, pitch: -5 },
   },
   3: {
-    monitor: { yaw: 49, pitch: 9 },
+    monitor: { yaw: 24, pitch: 9 },
   },
   4: {
-    bulletin: { yaw: -58, pitch: 14 },
+    bulletin: { yaw: -88, pitch: 8 },
   },
   5: {
-    sink: { yaw: 70, pitch: -12 },
+    sink: { yaw: 62, pitch: -6 },
   },
   6: {
-    patient: { yaw: -26, pitch: -6 },
+    patient: { yaw: -6, pitch: -6 },
   },
 }
 
@@ -64,6 +65,10 @@ export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick })
       onHotspotClick={onHotspotClick}
       title={`Patient ${caseData.patientNumber}: ${caseData.patientName}`}
       subtitle={`${caseData.patientAge} • ${caseData.roomVariant.lightingTone}`}
+      titleYaw={180}
+      titlePitch={30}
+      subtitleYaw={180}
+      subtitlePitch={24}
     />
   )
 }

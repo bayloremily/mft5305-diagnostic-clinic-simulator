@@ -235,14 +235,11 @@ function App() {
   const [simState, setSimState] = useState(() => startup.suspendedState ?? loadLocalState())
   const [clockNow, setClockNow] = useState(() => Date.now())
   const [selectedHotspotId, setSelectedHotspotId] = useState(null)
+  const [lobbyOverlay, setLobbyOverlay] = useState(null)
 
   const activeCase = casesData.cases.find((caseItem) => caseItem.id === simState.activeCaseId) ?? null
   const activeCaseState = activeCase ? simState.cases[activeCase.id] : null
-  const activeHotspot =
-    activeCase?.hotspots.find((hotspot) => hotspot.id === selectedHotspotId) ??
-    activeCase?.hotspots.find((hotspot) => !activeCaseState?.exploredHotspots.includes(hotspot.id)) ??
-    activeCase?.hotspots[0] ??
-    null
+  const selectedRoomHotspot = activeCase?.hotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? null
 
   const completedRooms = casesData.cases.filter((caseItem) => simState.cases[caseItem.id].completed).length
   const allRoomsComplete = completedRooms === casesData.cases.length
@@ -255,14 +252,6 @@ function App() {
   const timerMessage = getTimerMessage(remainingSeconds)
   const scoreSummary = getScoreSummary(simState)
   const learnerPassed = allRoomsComplete && scoreSummary.score >= answerKey.passingScore
-  const currentLocationLabel =
-    displayPhase === 'room' || displayPhase === 'synopsis'
-      ? `Patient ${activeCase?.patientNumber ?? ''}`.trim()
-      : displayPhase === 'timeout'
-        ? 'Time Expired'
-        : displayPhase === 'complete'
-          ? 'Simulation Complete'
-          : 'Lobby'
   const lessonStatus = getLessonStatus({
     launched: simState.launched,
     learnerPassed,
@@ -353,6 +342,7 @@ function App() {
       return
     }
 
+    setLobbyOverlay(null)
     setSimState((currentState) => ({
       ...currentState,
       launched: true,
@@ -370,6 +360,7 @@ function App() {
   }
 
   function continueToRoom() {
+    setSelectedHotspotId(null)
     setSimState((currentState) => ({
       ...currentState,
       phase: 'room',
@@ -377,6 +368,8 @@ function App() {
   }
 
   function returnToLobby() {
+    setSelectedHotspotId(null)
+    setLobbyOverlay(null)
     setSimState((currentState) => ({
       ...currentState,
       activeCaseId: null,
@@ -396,6 +389,15 @@ function App() {
         ? caseState.exploredHotspots
         : [...caseState.exploredHotspots, hotspotId],
     }))
+  }
+
+  function handleLobbyHotspotOpen(hotspotId) {
+    if (hotspotId === 'instructions') {
+      setLobbyOverlay('instructions')
+      return
+    }
+
+    openSynopsis(hotspotId)
   }
 
   function handleDiagnosisChange(value) {
@@ -583,47 +585,8 @@ function App() {
       </header>
 
       <section className="workspace">
-        <aside className="sidebar">
-          <div className="panel">
-            <h2>Global Progress</h2>
-            <p className="panel-copy">
-              Room completion still updates as learners progress through the hospital floor.
-            </p>
-            <div className="progress-summary">
-              <p>
-                <strong>Patients Completed:</strong> {completedRooms} / {casesData.cases.length}
-              </p>
-              <p>
-                <strong>Current Location:</strong> {currentLocationLabel}
-              </p>
-            </div>
-          </div>
-
-          <div className="panel">
-            <h2>Scoring Snapshot</h2>
-            <p className="score-line">
-              Auto-graded diagnosis score: <strong>{scoreSummary.score}%</strong>
-            </p>
-            <p className="panel-copy">
-              Matching diagnoses count toward the final score. Supporting evidence and rule-outs remain available for
-              instructor review outside the learner-facing scene.
-            </p>
-          </div>
-
-          <div className={`panel ${displayPhase === 'timeout' ? 'danger' : allRoomsComplete ? 'success' : ''}`}>
-            <h2>Attempt Status</h2>
-            <p className="panel-copy">
-              {displayPhase === 'timeout'
-                ? 'Time has expired. Current progress has been preserved and reported through the active storage mode.'
-                : allRoomsComplete
-                  ? 'All six patient rooms have been submitted. Final status and score are ready for LMS reporting.'
-                  : 'The learner can move freely between the lobby and room overlays while the simulation remains active.'}
-            </p>
-          </div>
-        </aside>
-
-        <section className="experience-panel">
-          <div className="canvas-card">
+        <section className="experience-panel is-full-width">
+          <div className={`canvas-card ${lobbyOverlay || selectedRoomHotspot ? 'has-active-overlay' : ''}`}>
             {displayPhase === 'room' && activeCase ? (
               <PatientRoomScene
                 caseData={activeCase}
@@ -631,7 +594,53 @@ function App() {
                 onHotspotClick={handleHotspotOpen}
               />
             ) : (
-              <LobbyScene cases={casesData.cases} caseStates={simState.cases} onSelectRoom={openSynopsis} />
+              <LobbyScene cases={casesData.cases} caseStates={simState.cases} onHotspotClick={handleLobbyHotspotOpen} />
+            )}
+
+            {lobbyOverlay === 'instructions' && (
+              <>
+                <div className="panorama-overlay-backdrop" />
+                <section className="panorama-overlay is-centered">
+                  <div className="panorama-overlay-header">
+                    <div>
+                      <p className="eyebrow">Lobby Instructions</p>
+                      <h2>How to Complete the Simulation</h2>
+                    </div>
+                    <button type="button" className="ghost" onClick={() => setLobbyOverlay(null)}>
+                      Close
+                    </button>
+                  </div>
+                  <ul className="overlay-list">
+                    <li>Review each patient case file before entering the room.</li>
+                    <li>Explore all required hotspots in the patient room.</li>
+                    <li>Use the Word document to take notes.</li>
+                    <li>Submit diagnosis, supporting evidence, and rule-outs.</li>
+                    <li>Complete all six patients before time expires.</li>
+                  </ul>
+                </section>
+              </>
+            )}
+
+            {displayPhase === 'room' && activeCase && activeCaseState && selectedRoomHotspot && (
+              <>
+                <div className="panorama-overlay-backdrop" />
+                <section className="panorama-overlay is-docked">
+                  <div className="panorama-overlay-header">
+                    <div>
+                      <p className="eyebrow">Hotspot Detail</p>
+                      <h2>{selectedRoomHotspot.title}</h2>
+                    </div>
+                    <button type="button" className="ghost" onClick={() => setSelectedHotspotId(null)}>
+                      Close
+                    </button>
+                  </div>
+                  <span className="pill">
+                    {activeCaseState.exploredHotspots.includes(selectedRoomHotspot.id) ? 'Explored' : 'New evidence'}
+                  </span>
+                  <p className="panel-copy">{selectedRoomHotspot.summary}</p>
+                  <p>{selectedRoomHotspot.detail}</p>
+                </section>
+              </>
             )}
           </div>
 
@@ -706,22 +715,6 @@ function App() {
                     <small>Room variant clue</small>
                     <p>{activeCase.roomVariant.environmentalCue}</p>
                   </article>
-                </div>
-
-                <div className="panel hotspot-panel">
-                  <div className="detail-header">
-                    <div>
-                      <p className="eyebrow">Hotspot Detail</p>
-                      <h2>{activeHotspot?.title ?? 'Select a hotspot'}</h2>
-                    </div>
-                    {activeHotspot && (
-                      <span className="pill">
-                        {activeCaseState.exploredHotspots.includes(activeHotspot.id) ? 'Explored' : 'New evidence'}
-                      </span>
-                    )}
-                  </div>
-                  <p className="panel-copy">{activeHotspot?.summary ?? 'Choose a hotspot in the scene or list.'}</p>
-                  <p>{activeHotspot?.detail}</p>
                 </div>
               </div>
 

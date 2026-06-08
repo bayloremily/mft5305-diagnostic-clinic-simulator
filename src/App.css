@@ -499,6 +499,7 @@ textarea {
 }
 
 .canvas-card {
+  position: relative;
   height: min(66vh, 44rem);
   overflow: hidden;
   border-radius: 34px;
@@ -514,6 +515,125 @@ textarea {
 .canvas-card canvas {
   width: 100% !important;
   height: 100% !important;
+}
+
+.panorama-hotspot {
+  position: relative;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+.panorama-hotspot-marker {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  border: 2px solid rgba(245, 251, 248, 0.95);
+  background: rgba(199, 165, 63, 0.92);
+  box-shadow: 0 0 0 6px rgba(20, 49, 54, 0.18);
+}
+
+.panorama-hotspot.is-door .panorama-hotspot-marker {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.panorama-hotspot.is-desk .panorama-hotspot-marker {
+  background: rgba(31, 106, 85, 0.94);
+}
+
+.panorama-hotspot.is-complete .panorama-hotspot-marker {
+  background: rgba(79, 137, 98, 0.95);
+}
+
+.panorama-hotspot:focus-visible {
+  outline: none;
+}
+
+.panorama-hotspot:focus-visible .panorama-hotspot-marker,
+.panorama-hotspot:hover .panorama-hotspot-marker {
+  transform: scale(1.08);
+}
+
+.panorama-hotspot-check {
+  position: absolute;
+  right: -0.45rem;
+  top: -0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: var(--success);
+  color: #f8fbf9;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.panorama-hotspot-label {
+  position: absolute;
+  left: 50%;
+  top: -0.95rem;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  padding: 0.34rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(25, 58, 48, 0.1);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 12px 28px rgba(17, 38, 32, 0.12);
+}
+
+.panorama-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(19, 50, 45, 0.18);
+  backdrop-filter: blur(7px);
+  z-index: 3;
+}
+
+.panorama-overlay {
+  position: absolute;
+  z-index: 4;
+  border-radius: 28px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 28px 80px rgba(17, 38, 32, 0.16);
+  padding: 1.2rem;
+}
+
+.panorama-overlay.is-centered {
+  width: min(42rem, calc(100% - 2rem));
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.panorama-overlay.is-docked {
+  width: min(26rem, calc(100% - 2rem));
+  right: 1rem;
+  top: 1rem;
+  bottom: 1rem;
+  overflow: auto;
+}
+
+.panorama-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.overlay-list {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .synopsis-card {
@@ -579,10 +699,6 @@ textarea {
 .detail-card p,
 .panel p {
   margin-bottom: 0;
-}
-
-.hotspot-panel {
-  margin-top: 1rem;
 }
 
 .diagnosis-card {
@@ -663,6 +779,15 @@ textarea {
 
   .canvas-card {
     height: 54vh;
+  }
+
+  .panorama-overlay.is-docked {
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    top: auto;
+    bottom: 1rem;
+    max-height: 60%;
   }
 
   .button-row {

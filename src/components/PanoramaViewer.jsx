@@ -56,33 +56,29 @@ function PanoramaSphere({ imagePath }) {
 
 function PanoramaHotspot({ hotspot, explored, onClick }) {
   const position = degreesToSpherePosition(hotspot.yaw, hotspot.pitch)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const shouldShowLabel = hotspot.labelMode === 'always' || isHovered || isFocused
+  const isComplete = hotspot.completed ?? explored
+  const variantClass = hotspot.variant === 'door' ? 'is-door' : hotspot.variant === 'desk' ? 'is-desk' : ''
 
   return (
     <group position={position}>
-      <mesh onClick={onClick}>
-        <sphereGeometry args={[0.2, 24, 24]} />
-        <meshStandardMaterial
-          color={explored ? '#5f9b6d' : '#c7a53f'}
-          emissive={explored ? '#346742' : '#7a6624'}
-          emissiveIntensity={0.55}
-        />
-      </mesh>
-      <mesh position={[0, -0.18, 0]} lookAt={[0, 0, 0]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.34, 12]} />
-        <meshStandardMaterial color="#6a787d" />
-      </mesh>
-      <Text
-        position={[0, 0.46, 0]}
-        fontSize={0.2}
-        maxWidth={2}
-        color="#143136"
-        outlineWidth={0.018}
-        outlineColor="#f5fbf8"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {hotspot.label}
-      </Text>
+      <Html transform sprite distanceFactor={10} position={[0, 0, 0]}>
+        <button
+          type="button"
+          className={`panorama-hotspot ${variantClass} ${isComplete ? 'is-complete' : ''}`}
+          onClick={onClick}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        >
+          <span className="panorama-hotspot-marker" aria-hidden="true" />
+          {isComplete && <span className="panorama-hotspot-check" aria-hidden="true">✓</span>}
+          {shouldShowLabel && <span className="panorama-hotspot-label">{hotspot.label}</span>}
+        </button>
+      </Html>
     </group>
   )
 }
@@ -96,6 +92,10 @@ export function PanoramaViewer({
   onHotspotClick,
   title,
   subtitle,
+  titleYaw = 180,
+  titlePitch = 30,
+  subtitleYaw = 180,
+  subtitlePitch = 24,
 }) {
   const imageStatus = useImageStatus(imagePath)
 
@@ -106,6 +106,9 @@ export function PanoramaViewer({
   if (imageStatus === 'loading') {
     return <div className="scene-fallback">{loadingText}</div>
   }
+
+  const titlePosition = degreesToSpherePosition(titleYaw, titlePitch, 7)
+  const subtitlePosition = degreesToSpherePosition(subtitleYaw, subtitlePitch, 7)
 
   return (
     <Canvas camera={{ position: [0, 0, 0.1], fov: 72 }}>
@@ -121,13 +124,13 @@ export function PanoramaViewer({
         <PanoramaSphere imagePath={imagePath} />
 
         {title && (
-          <Text position={[0, 5.35, -6.9]} fontSize={0.46} color="#f4faf8" anchorX="center">
+          <Text position={titlePosition} fontSize={0.46} color="#f4faf8" anchorX="center">
             {title}
           </Text>
         )}
 
         {subtitle && (
-          <Text position={[0, 4.8, -6.9]} fontSize={0.22} color="#d8ebe3" anchorX="center">
+          <Text position={subtitlePosition} fontSize={0.22} color="#d8ebe3" anchorX="center">
             {subtitle}
           </Text>
         )}
@@ -145,10 +148,10 @@ export function PanoramaViewer({
           enablePan={false}
           enableZoom
           enableDamping
-          dampingFactor={0.08}
-          rotateSpeed={-0.35}
+          dampingFactor={0.1}
+          rotateSpeed={0.45}
           minDistance={0.1}
-          maxDistance={0.8}
+          maxDistance={0.65}
           minPolarAngle={0.3}
           maxPolarAngle={Math.PI - 0.3}
           target={[0, 0, 0]}
