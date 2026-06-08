@@ -261,6 +261,7 @@ function App() {
     displayPhase === 'synopsis' ||
     lobbyOverlay === 'instructions' ||
     Boolean(selectedRoomHotspot)
+  const showPanoramaHotspots = !hasPanoramaOverlay
 
   useEffect(() => {
     return () => {
@@ -596,9 +597,15 @@ function App() {
                 caseData={activeCase}
                 exploredHotspots={activeCaseState.exploredHotspots}
                 onHotspotClick={handleHotspotOpen}
+                showHotspots={showPanoramaHotspots}
               />
             ) : (
-              <LobbyScene cases={casesData.cases} caseStates={simState.cases} onHotspotClick={handleLobbyHotspotOpen} />
+              <LobbyScene
+                cases={casesData.cases}
+                caseStates={simState.cases}
+                onHotspotClick={handleLobbyHotspotOpen}
+                showHotspots={showPanoramaHotspots}
+              />
             )}
 
             {displayPhase === 'room' && activeCase && (

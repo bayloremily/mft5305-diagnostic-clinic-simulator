@@ -90,6 +90,7 @@ export function PanoramaViewer({
   hotspots,
   exploredHotspotIds = [],
   onHotspotClick,
+  showHotspots = true,
 }) {
   const imageStatus = useImageStatus(imagePath)
 
@@ -114,14 +115,15 @@ export function PanoramaViewer({
         <pointLight position={[0, 3, 0]} intensity={0.35} color="#fff5de" />
         <PanoramaSphere imagePath={imagePath} />
 
-        {hotspots.map((hotspot) => (
-          <PanoramaHotspot
-            key={hotspot.id}
-            hotspot={hotspot}
-            explored={exploredHotspotIds.includes(hotspot.id)}
-            onClick={() => onHotspotClick(hotspot.id)}
-          />
-        ))}
+        {showHotspots &&
+          hotspots.map((hotspot) => (
+            <PanoramaHotspot
+              key={hotspot.id}
+              hotspot={hotspot}
+              explored={exploredHotspotIds.includes(hotspot.id)}
+              onClick={() => onHotspotClick(hotspot.id)}
+            />
+          ))}
 
         <OrbitControls
           enablePan={false}

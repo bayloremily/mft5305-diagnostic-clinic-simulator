@@ -11,7 +11,7 @@ const LOBBY_DOOR_HOTSPOTS = [
   { id: 'patient-6', yaw: 82, pitch: 0 },
 ]
 
-export function LobbyScene({ cases, caseStates, onHotspotClick }) {
+export function LobbyScene({ cases, caseStates, onHotspotClick, showHotspots = true }) {
   const hotspots = cases.map((caseItem, index) => ({
     id: caseItem.id,
     label: `Patient ${caseItem.patientNumber}`,
@@ -41,6 +41,7 @@ export function LobbyScene({ cases, caseStates, onHotspotClick }) {
       hotspots={hotspots}
       exploredHotspotIds={exploredHotspotIds}
       onHotspotClick={onHotspotClick}
+      showHotspots={showHotspots}
     />
   )
 }

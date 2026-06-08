@@ -43,7 +43,7 @@ function resolveHotspotCoordinates(patientNumber, anchor) {
   return ROOM_HOTSPOT_COORDINATES[patientNumber]?.[anchor] ?? ROOM_HOTSPOT_COORDINATES.default[anchor] ?? { yaw: 0, pitch: 0 }
 }
 
-export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick }) {
+export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick, showHotspots = true }) {
   const imagePath = ROOM_IMAGE_BY_PATIENT[caseData.patientNumber] ?? ROOM_IMAGE_BY_PATIENT[6]
   const hotspots = caseData.hotspots.map((hotspot) => {
     const coordinates = resolveHotspotCoordinates(caseData.patientNumber, hotspot.anchor)
@@ -63,6 +63,7 @@ export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick })
       hotspots={hotspots}
       exploredHotspotIds={exploredHotspots}
       onHotspotClick={onHotspotClick}
+      showHotspots={showHotspots}
     />
   )
 }
