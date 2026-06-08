@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="com.mft5305.diagnostic-clinic-simulator"
+  version="1.0"
+  xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+  xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="diagnostic-clinic-org">
+    <organization identifier="diagnostic-clinic-org">
+      <title>Diagnostic Clinic Simulator</title>
+      <item identifier="diagnostic-clinic-item" identifierref="diagnostic-clinic-resource" isvisible="true">
+        <title>Diagnostic Clinic Simulator</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource
+      identifier="diagnostic-clinic-resource"
+      type="webcontent"
+      adlcp:scormtype="sco"
+      href="index.html">
+      <file href="index.html" />
+    </resource>
+  </resources>
+</manifest>

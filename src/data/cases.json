@@ -1,0 +1,562 @@
+{
+  "cases": [
+    {
+      "id": "patient-1",
+      "patientNumber": 1,
+      "patientName": "Avery Cole",
+      "patientAge": "19-year-old college student",
+      "presentingConcern": "Sleep disruption and panic symptoms",
+      "referralSource": "Campus counseling center",
+      "primaryGoal": "Clarify a panic-spectrum presentation without overpathologizing stress.",
+      "synopsis": "Avery arrived from the emergency department after a second episode of chest tightness, dizziness, and fear of dying during finals week. Medical workup was unremarkable, but Avery now avoids driving alone and scans constantly for the next attack.",
+      "diagnosisOptions": [
+        "Panic Disorder",
+        "Generalized Anxiety Disorder",
+        "Social Anxiety Disorder",
+        "Adjustment Disorder with Anxiety"
+      ],
+      "roomVariant": {
+        "accentColor": "#2d6f62",
+        "accentSoft": "#cfe6dd",
+        "lightingColor": "#f4fbff",
+        "lightingTone": "cool daylight",
+        "bulletinBoardItems": [
+          "Campus tutoring card",
+          "Sleep hygiene handout",
+          "Parking pass"
+        ],
+        "chartHeader": "ED Observation Chart",
+        "environmentalCue": "A half-zipped backpack sits beside the visitor chair with a water bottle and exam flashcards.",
+        "patientVisual": {
+          "skin": "#e4b39a",
+          "top": "#5f8ea0",
+          "hair": "#4d342c",
+          "blanket": "#cadbe1"
+        }
+      },
+      "hotspots": [
+        {
+          "id": "patient-interview",
+          "anchor": "patient",
+          "label": "Patient Interview",
+          "title": "Patient Interview",
+          "summary": "Direct report from Avery at bedside.",
+          "detail": "Avery describes abrupt surges of fear that peak within minutes, followed by chest tightness, trembling, and fear of losing control. Avery now worries daily about having another episode in class or on the highway."
+        },
+        {
+          "id": "intake-chart",
+          "anchor": "chart",
+          "label": "Intake Chart",
+          "title": "Intake Chart",
+          "summary": "Nursing intake and triage summary.",
+          "detail": "Triage notes document recurrent episodes of shortness of breath, dizziness, and fear of dying. Vitals normalize after each episode, and no cardiac findings were identified."
+        },
+        {
+          "id": "observation-notes",
+          "anchor": "monitor",
+          "label": "Observation Notes",
+          "title": "Observation Notes",
+          "summary": "Clinician observations from the room.",
+          "detail": "Avery scans the doorway repeatedly, keeps one hand on a water bottle, and asks whether staff can stay nearby in case symptoms return."
+        },
+        {
+          "id": "medication-history",
+          "anchor": "sink",
+          "label": "Medication / History Record",
+          "title": "Medication / History Record",
+          "summary": "Medication list and relevant medical history.",
+          "detail": "No current psychiatric medication. Avery reports sleep dropping to 4-5 hours nightly during exams and denies substance use other than occasional energy drinks."
+        },
+        {
+          "id": "collateral-note",
+          "anchor": "bulletin",
+          "label": "Family or Collateral Note",
+          "title": "Family or Collateral Note",
+          "summary": "Collateral information from a roommate.",
+          "detail": "A roommate reports Avery has started texting before every class, asking friends to confirm exit routes and stay available in case an attack starts."
+        },
+        {
+          "id": "environmental-observation",
+          "anchor": "environment",
+          "label": "Environmental Observation",
+          "title": "Environmental Observation",
+          "summary": "Clues from the room environment.",
+          "detail": "A backpack checklist includes water bottle, mints, headphones, and a note reading 'sit by the exit.' The pattern suggests anticipatory anxiety and safety behaviors."
+        }
+      ],
+      "completionRequired": [
+        "patient-interview",
+        "intake-chart",
+        "observation-notes",
+        "medication-history",
+        "collateral-note",
+        "environmental-observation"
+      ]
+    },
+    {
+      "id": "patient-2",
+      "patientNumber": 2,
+      "patientName": "Marisol Vega",
+      "patientAge": "34-year-old project manager",
+      "presentingConcern": "Persistent worry, fatigue, and muscle tension",
+      "referralSource": "Primary care physician",
+      "primaryGoal": "Differentiate chronic generalized anxiety from overlapping stress reactions.",
+      "synopsis": "Marisol was referred after repeated PCP visits for headaches, insomnia, and muscle tension. She reports relentless worry across parenting, finances, health, and work, and says she rarely feels mentally off duty.",
+      "diagnosisOptions": [
+        "Generalized Anxiety Disorder",
+        "Obsessive-Compulsive Disorder",
+        "Panic Disorder",
+        "Persistent Depressive Disorder"
+      ],
+      "roomVariant": {
+        "accentColor": "#496f3d",
+        "accentSoft": "#dce8d2",
+        "lightingColor": "#fff8ef",
+        "lightingTone": "soft warm white",
+        "bulletinBoardItems": [
+          "Work schedule printout",
+          "Family calendar",
+          "Relaxation breathing card"
+        ],
+        "chartHeader": "Primary Care Referral Packet",
+        "environmentalCue": "A planner on the bedside table is filled with backup plans and highlighted reminders.",
+        "patientVisual": {
+          "skin": "#d59f87",
+          "top": "#758c5b",
+          "hair": "#332722",
+          "blanket": "#d7dfd2"
+        }
+      },
+      "hotspots": [
+        {
+          "id": "patient-interview",
+          "anchor": "patient",
+          "label": "Patient Interview",
+          "title": "Patient Interview",
+          "summary": "Direct report from Marisol.",
+          "detail": "Marisol says there is always another thing to worry about and that relaxing feels irresponsible. She reports feeling keyed up most days and having difficulty shutting off her thoughts at bedtime."
+        },
+        {
+          "id": "intake-chart",
+          "anchor": "chart",
+          "label": "Intake Chart",
+          "title": "Intake Chart",
+          "summary": "Intake timeline and symptom duration.",
+          "detail": "Symptoms have been present for more than a year, with excessive worry across multiple domains, restlessness, irritability, muscle tension, and fatigue."
+        },
+        {
+          "id": "observation-notes",
+          "anchor": "monitor",
+          "label": "Observation Notes",
+          "title": "Observation Notes",
+          "summary": "Clinician observations from the room.",
+          "detail": "Marisol frequently apologizes for 'forgetting something important,' rubs her shoulders, and asks whether the care team has considered all possible follow-up scenarios."
+        },
+        {
+          "id": "medication-history",
+          "anchor": "sink",
+          "label": "Medication / History Record",
+          "title": "Medication / History Record",
+          "summary": "Current treatment and medical screening.",
+          "detail": "PCP notes ruled out thyroid concerns and prescribed a short-term sleep aid after persistent insomnia. No history of panic episodes or compulsive rituals is documented."
+        },
+        {
+          "id": "collateral-note",
+          "anchor": "bulletin",
+          "label": "Family or Collateral Note",
+          "title": "Family or Collateral Note",
+          "summary": "Collateral note from Marisol's spouse.",
+          "detail": "Her spouse reports Marisol spends evenings cycling through worst-case possibilities for school, bills, and health appointments, even on calm days."
+        },
+        {
+          "id": "environmental-observation",
+          "anchor": "environment",
+          "label": "Environmental Observation",
+          "title": "Environmental Observation",
+          "summary": "Clues from nearby belongings and setup.",
+          "detail": "The bedside planner includes contingency plans for routine errands, childcare pickups, and weather changes. The pattern reflects pervasive worry rather than a single fear trigger."
+        }
+      ],
+      "completionRequired": [
+        "patient-interview",
+        "intake-chart",
+        "observation-notes",
+        "medication-history",
+        "collateral-note",
+        "environmental-observation"
+      ]
+    },
+    {
+      "id": "patient-3",
+      "patientNumber": 3,
+      "patientName": "Jordan Price",
+      "patientAge": "28-year-old graduate assistant",
+      "presentingConcern": "Social avoidance and fear of embarrassment",
+      "referralSource": "University supervisor",
+      "primaryGoal": "Assess whether the social fear pattern fits an anxiety disorder presentation.",
+      "synopsis": "Jordan was encouraged to seek evaluation after avoiding teaching demonstrations, staff meetings, and shared dining areas on campus. Jordan reports dread before presentations and intense fear of negative evaluation in routine social settings.",
+      "diagnosisOptions": [
+        "Social Anxiety Disorder",
+        "Avoidant Personality Disorder",
+        "Panic Disorder",
+        "Autism Spectrum Disorder"
+      ],
+      "roomVariant": {
+        "accentColor": "#7a6a24",
+        "accentSoft": "#ece4bd",
+        "lightingColor": "#eef8ff",
+        "lightingTone": "bright fluorescent",
+        "bulletinBoardItems": [
+          "Department seminar flyer",
+          "Teaching schedule",
+          "Public speaking tips"
+        ],
+        "chartHeader": "Supervisor Concern Summary",
+        "environmentalCue": "A folded campus map marks alternate routes between classrooms and quiet stairwells.",
+        "patientVisual": {
+          "skin": "#c6927b",
+          "top": "#867636",
+          "hair": "#241f1e",
+          "blanket": "#dbd5bc"
+        }
+      },
+      "hotspots": [
+        {
+          "id": "patient-interview",
+          "anchor": "patient",
+          "label": "Patient Interview",
+          "title": "Patient Interview",
+          "summary": "Direct report from Jordan.",
+          "detail": "Jordan says it feels safer to disappear than risk people noticing anxiety. Anticipatory dread builds for days before presentations, and Jordan avoids eating where others might watch."
+        },
+        {
+          "id": "intake-chart",
+          "anchor": "chart",
+          "label": "Intake Chart",
+          "title": "Intake Chart",
+          "summary": "Referral summary and impairment notes.",
+          "detail": "Jordan has repeatedly asked colleagues to cover teaching demonstrations and office hours because of overwhelming fear of embarrassment and negative judgment."
+        },
+        {
+          "id": "observation-notes",
+          "anchor": "monitor",
+          "label": "Observation Notes",
+          "title": "Observation Notes",
+          "summary": "Clinician observations from the room.",
+          "detail": "Jordan speaks softly, avoids sustained eye contact, and flushes visibly when discussing classroom performance or being watched while eating."
+        },
+        {
+          "id": "medication-history",
+          "anchor": "sink",
+          "label": "Medication / History Record",
+          "title": "Medication / History Record",
+          "summary": "History and symptom pattern.",
+          "detail": "There is no history of discrete unexpected panic attacks outside social exposure situations. Jordan denies developmental communication concerns and describes the problem primarily as fear of humiliation."
+        },
+        {
+          "id": "collateral-note",
+          "anchor": "bulletin",
+          "label": "Family or Collateral Note",
+          "title": "Family or Collateral Note",
+          "summary": "Collateral note from a supervisor.",
+          "detail": "Jordan's supervisor reports strong written work but marked avoidance of meetings, demos, and informal networking events needed for the graduate assistant role."
+        },
+        {
+          "id": "environmental-observation",
+          "anchor": "environment",
+          "label": "Environmental Observation",
+          "title": "Environmental Observation",
+          "summary": "Clues from nearby belongings and setup.",
+          "detail": "The campus map and a stack of presentation note cards emphasize escape planning and overpreparation for evaluation situations."
+        }
+      ],
+      "completionRequired": [
+        "patient-interview",
+        "intake-chart",
+        "observation-notes",
+        "medication-history",
+        "collateral-note",
+        "environmental-observation"
+      ]
+    },
+    {
+      "id": "patient-4",
+      "patientNumber": 4,
+      "patientName": "Noah Bennett",
+      "patientAge": "41-year-old firefighter",
+      "presentingConcern": "Trauma reminders, nightmares, and hyperarousal",
+      "referralSource": "Employee assistance program",
+      "primaryGoal": "Examine a trauma-related symptom cluster in context.",
+      "synopsis": "Noah presented after repeated sleep disruption and strong physiologic reactions to smoke alarms following a fatal apartment fire response six months ago. Coworkers have noticed withdrawal, irritability, and increased call-outs since the incident.",
+      "diagnosisOptions": [
+        "Posttraumatic Stress Disorder",
+        "Acute Stress Disorder",
+        "Adjustment Disorder",
+        "Panic Disorder"
+      ],
+      "roomVariant": {
+        "accentColor": "#8a4e2f",
+        "accentSoft": "#ecd2c3",
+        "lightingColor": "#fff1eb",
+        "lightingTone": "amber evening light",
+        "bulletinBoardItems": [
+          "Shift rotation",
+          "Sleep clinic referral",
+          "Fire station photo"
+        ],
+        "chartHeader": "Critical Incident Follow-Up",
+        "environmentalCue": "A sealed station patch envelope rests near the window, unopened.",
+        "patientVisual": {
+          "skin": "#b78368",
+          "top": "#8f5a43",
+          "hair": "#2f2521",
+          "blanket": "#dbc7c2"
+        }
+      },
+      "hotspots": [
+        {
+          "id": "patient-interview",
+          "anchor": "patient",
+          "label": "Patient Interview",
+          "title": "Patient Interview",
+          "summary": "Direct report from Noah.",
+          "detail": "Noah reports nightmares, irritability, and immediate sensory flashbacks when alarms sound. He says he feels emotionally distant from coworkers and avoids the station kitchen after difficult calls."
+        },
+        {
+          "id": "intake-chart",
+          "anchor": "chart",
+          "label": "Intake Chart",
+          "title": "Intake Chart",
+          "summary": "Incident timeline and symptom summary.",
+          "detail": "The chart documents direct trauma exposure during a fatal apartment fire response, followed by re-experiencing symptoms, hyperarousal, sleep disruption, and avoidance over a six-month span."
+        },
+        {
+          "id": "observation-notes",
+          "anchor": "monitor",
+          "label": "Observation Notes",
+          "title": "Observation Notes",
+          "summary": "Clinician observations from the room.",
+          "detail": "Noah startles at hallway noise, sits with his back to the wall, and becomes visibly tense when discussing smoke alarms and the incident scene."
+        },
+        {
+          "id": "medication-history",
+          "anchor": "sink",
+          "label": "Medication / History Record",
+          "title": "Medication / History Record",
+          "summary": "Sleep history and treatment record.",
+          "detail": "Noah has no prior panic diagnosis. A recent sleep aid improved duration only slightly, and nightmares continue several nights per week."
+        },
+        {
+          "id": "collateral-note",
+          "anchor": "bulletin",
+          "label": "Family or Collateral Note",
+          "title": "Family or Collateral Note",
+          "summary": "Collateral note from a coworker.",
+          "detail": "A coworker reports Noah removed team photos from his locker, avoids communal meals, and has become emotionally blunted since the fire response."
+        },
+        {
+          "id": "environmental-observation",
+          "anchor": "environment",
+          "label": "Environmental Observation",
+          "title": "Environmental Observation",
+          "summary": "Clues from nearby belongings and setup.",
+          "detail": "The unopened station patch envelope and turned-over photo frame suggest avoidance of reminders tied to the traumatic event."
+        }
+      ],
+      "completionRequired": [
+        "patient-interview",
+        "intake-chart",
+        "observation-notes",
+        "medication-history",
+        "collateral-note",
+        "environmental-observation"
+      ]
+    },
+    {
+      "id": "patient-5",
+      "patientNumber": 5,
+      "patientName": "Tessa Nguyen",
+      "patientAge": "23-year-old retail associate",
+      "presentingConcern": "Obsessions and ritualized checking",
+      "referralSource": "Urgent care follow-up",
+      "primaryGoal": "Evaluate obsessive-compulsive features without exposing the answer key.",
+      "synopsis": "Tessa came in after urgent care treated skin irritation from frequent hand-washing. Tessa reports contamination fears, repeated checking, and rigid rituals that now delay work arrival and make shared spaces feel unsafe.",
+      "diagnosisOptions": [
+        "Obsessive-Compulsive Disorder",
+        "Illness Anxiety Disorder",
+        "Generalized Anxiety Disorder",
+        "Specific Phobia"
+      ],
+      "roomVariant": {
+        "accentColor": "#2e7b76",
+        "accentSoft": "#d0ebe7",
+        "lightingColor": "#f2fffd",
+        "lightingTone": "cool clinical white",
+        "bulletinBoardItems": [
+          "Skin care instructions",
+          "Work attendance note",
+          "ERP clinic brochure"
+        ],
+        "chartHeader": "Urgent Care Follow-Up",
+        "environmentalCue": "Travel soap bottles and sealed wipes are lined up with labels facing outward.",
+        "patientVisual": {
+          "skin": "#d8a184",
+          "top": "#4f8b87",
+          "hair": "#2b201d",
+          "blanket": "#d5e4e2"
+        }
+      },
+      "hotspots": [
+        {
+          "id": "patient-interview",
+          "anchor": "patient",
+          "label": "Patient Interview",
+          "title": "Patient Interview",
+          "summary": "Direct report from Tessa.",
+          "detail": "Tessa says contamination thoughts feel irrational but overwhelming. Repeating hand-washing or checking brings short relief, then the fear returns."
+        },
+        {
+          "id": "intake-chart",
+          "anchor": "chart",
+          "label": "Intake Chart",
+          "title": "Intake Chart",
+          "summary": "Intake summary and symptom impairment.",
+          "detail": "Tessa is frequently late to work because leaving home requires repeated lock, stove, and contamination checks. The rituals consume significant time each day."
+        },
+        {
+          "id": "observation-notes",
+          "anchor": "monitor",
+          "label": "Observation Notes",
+          "title": "Observation Notes",
+          "summary": "Clinician observations from the room.",
+          "detail": "Tessa asks whether the chair was sanitized, uses hand gel multiple times during the visit, and becomes briefly calmer after each ritual."
+        },
+        {
+          "id": "medication-history",
+          "anchor": "sink",
+          "label": "Medication / History Record",
+          "title": "Medication / History Record",
+          "summary": "Relevant history and treatment record.",
+          "detail": "There is no primary medical explanation for the distress. Tessa denies panic episodes and instead describes intrusive contamination thoughts followed by compulsive behavior."
+        },
+        {
+          "id": "collateral-note",
+          "anchor": "bulletin",
+          "label": "Family or Collateral Note",
+          "title": "Family or Collateral Note",
+          "summary": "Collateral note from Tessa's sibling.",
+          "detail": "A sibling reports soap use has accelerated, extra bottles are stored in every room, and family outings are delayed while Tessa repeats washing routines."
+        },
+        {
+          "id": "environmental-observation",
+          "anchor": "environment",
+          "label": "Environmental Observation",
+          "title": "Environmental Observation",
+          "summary": "Clues from nearby belongings and setup.",
+          "detail": "The arrangement of wipes, extra soap, and a written counting sequence points to ritualized behavior intended to neutralize intrusive contamination fears."
+        }
+      ],
+      "completionRequired": [
+        "patient-interview",
+        "intake-chart",
+        "observation-notes",
+        "medication-history",
+        "collateral-note",
+        "environmental-observation"
+      ]
+    },
+    {
+      "id": "patient-6",
+      "patientNumber": 6,
+      "patientName": "Elliot Harper",
+      "patientAge": "47-year-old middle school teacher",
+      "presentingConcern": "Depressed mood and loss of interest",
+      "referralSource": "Self-referred after church counseling",
+      "primaryGoal": "Assess mood symptoms, impairment, and rule-outs.",
+      "synopsis": "Elliot presented after two months of low mood, early morning waking, guilt, low energy, and withdrawal from family and church activities following several workplace stressors. Elliot says daily functioning now feels effortful and flat.",
+      "diagnosisOptions": [
+        "Major Depressive Disorder",
+        "Persistent Depressive Disorder",
+        "Adjustment Disorder with Depressed Mood",
+        "Bipolar II Disorder"
+      ],
+      "roomVariant": {
+        "accentColor": "#546b8a",
+        "accentSoft": "#d7dfea",
+        "lightingColor": "#eef3ff",
+        "lightingTone": "muted overcast",
+        "bulletinBoardItems": [
+          "Church meal train card",
+          "Lesson plan reminders",
+          "Follow-up appointment slip"
+        ],
+        "chartHeader": "Mood Evaluation Packet",
+        "environmentalCue": "A lesson planner with incomplete entries sits beside an untouched snack.",
+        "patientVisual": {
+          "skin": "#be8a72",
+          "top": "#667a99",
+          "hair": "#3b2b24",
+          "blanket": "#d8dde7"
+        }
+      },
+      "hotspots": [
+        {
+          "id": "patient-interview",
+          "anchor": "patient",
+          "label": "Patient Interview",
+          "title": "Patient Interview",
+          "summary": "Direct report from Elliot.",
+          "detail": "Elliot describes feeling slowed down, guilty, and disconnected from activities that usually matter. There is no report of recent elevated mood, reduced need for sleep, or impulsive episodes."
+        },
+        {
+          "id": "intake-chart",
+          "anchor": "chart",
+          "label": "Intake Chart",
+          "title": "Intake Chart",
+          "summary": "Intake timeline and symptom duration.",
+          "detail": "The chart notes a two-month period of low mood, reduced appetite, low energy, impaired concentration, and diminished interest across work, home, and faith-community roles."
+        },
+        {
+          "id": "observation-notes",
+          "anchor": "monitor",
+          "label": "Observation Notes",
+          "title": "Observation Notes",
+          "summary": "Clinician observations from the room.",
+          "detail": "Elliot speaks softly, pauses before answering, and shows limited facial reactivity. Psychomotor slowing is noticeable during the interaction."
+        },
+        {
+          "id": "medication-history",
+          "anchor": "sink",
+          "label": "Medication / History Record",
+          "title": "Medication / History Record",
+          "summary": "Relevant history and rule-out data.",
+          "detail": "No prior manic episodes are documented. Medical screening is unremarkable, and the current episode extends beyond a brief situational sadness response."
+        },
+        {
+          "id": "collateral-note",
+          "anchor": "bulletin",
+          "label": "Family or Collateral Note",
+          "title": "Family or Collateral Note",
+          "summary": "Collateral note from Elliot's spouse.",
+          "detail": "A spouse reports Elliot has withdrawn from hobbies, limits eye contact, wakes early, and has eaten very little over the last eight weeks."
+        },
+        {
+          "id": "environmental-observation",
+          "anchor": "environment",
+          "label": "Environmental Observation",
+          "title": "Environmental Observation",
+          "summary": "Clues from nearby belongings and setup.",
+          "detail": "The unfinished lesson planner and untouched snack suggest diminished energy, concentration, and appetite rather than anxious overpreparation."
+        }
+      ],
+      "completionRequired": [
+        "patient-interview",
+        "intake-chart",
+        "observation-notes",
+        "medication-history",
+        "collateral-note",
+        "environmental-observation"
+      ]
+    }
+  ]
+}
