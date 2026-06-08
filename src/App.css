@@ -531,6 +531,7 @@ textarea {
   background: transparent;
   box-shadow: none;
   color: inherit;
+  pointer-events: auto;
 }
 
 .panorama-hotspot-marker {
@@ -601,12 +602,12 @@ textarea {
   inset: 0;
   background: rgba(19, 50, 45, 0.18);
   backdrop-filter: blur(7px);
-  z-index: 3;
+  z-index: 20;
 }
 
 .panorama-overlay {
   position: absolute;
-  z-index: 4;
+  z-index: 30;
   border-radius: 28px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.94);
@@ -651,13 +652,25 @@ textarea {
 .overlay-card.is-panorama-modal {
   position: absolute;
   inset: 1rem;
-  z-index: 4;
+  z-index: 30;
   display: grid;
   place-items: center;
   background: transparent;
   border: 0;
   box-shadow: none;
   padding: 0;
+}
+
+.canvas-card.has-active-overlay canvas,
+.canvas-card.has-active-overlay .panorama-hotspot,
+.canvas-card.has-active-overlay .panorama-back-button {
+  pointer-events: none !important;
+}
+
+.canvas-card.has-active-overlay .panorama-overlay,
+.canvas-card.has-active-overlay .panorama-overlay-backdrop,
+.canvas-card.has-active-overlay .overlay-card.is-panorama-modal {
+  pointer-events: auto;
 }
 
 .tablet-frame {
