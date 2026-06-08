@@ -641,8 +641,22 @@ textarea {
   place-items: center;
 }
 
+.overlay-card.is-panorama-modal {
+  position: absolute;
+  inset: 1rem;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
 .tablet-frame {
   width: min(46rem, 100%);
+  max-height: calc(100vh - 8rem);
+  overflow: auto;
   border-radius: 34px;
   padding: 1.6rem;
   background:
@@ -686,6 +700,13 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(21rem, 0.8fr);
   gap: 1rem;
+}
+
+.overlay-card.is-panorama-docked {
+  position: absolute;
+  inset: 1rem;
+  z-index: 4;
+  overflow: auto;
 }
 
 .room-header,
@@ -779,6 +800,18 @@ textarea {
 
   .canvas-card {
     height: 54vh;
+  }
+
+  .overlay-card.is-panorama-modal {
+    inset: 0.75rem;
+  }
+
+  .overlay-card.is-panorama-docked {
+    inset: 0.75rem;
+  }
+
+  .tablet-frame {
+    max-height: calc(100vh - 7rem);
   }
 
   .panorama-overlay.is-docked {
