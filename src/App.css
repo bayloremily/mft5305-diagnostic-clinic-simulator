@@ -29,7 +29,8 @@
 
 .boot-fallback,
 .app-error-card,
-.scene-fallback {
+.scene-fallback,
+.scene-error {
   border: 1px solid var(--line);
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.9);
@@ -61,9 +62,23 @@
 }
 
 .scene-fallback {
+  min-height: 100%;
   padding: 0.8rem 1rem;
   color: var(--text);
   font-weight: 700;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.scene-error {
+  min-height: 100%;
+  padding: 1rem 1.2rem;
+  color: var(--danger);
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  text-align: center;
 }
 
 body {
@@ -405,7 +420,7 @@ textarea {
 
 .workspace {
   display: grid;
-  grid-template-columns: 22rem minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
 }
@@ -490,6 +505,10 @@ textarea {
   border: 1px solid var(--line);
   background: linear-gradient(180deg, #f8fbf9, #e7eeeb);
   box-shadow: var(--shadow);
+}
+
+.experience-panel.is-full-width .canvas-card {
+  height: min(74vh, 52rem);
 }
 
 .canvas-card canvas {

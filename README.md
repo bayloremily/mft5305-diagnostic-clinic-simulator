@@ -1,11 +1,11 @@
 # Diagnostic Clinic Simulator
 
-Diagnostic Clinic Simulator is a SCORM 1.2-compatible React + Vite learning experience for MFT 5305. Learners begin on a cover page, review launch instructions, enter a Three.js hospital intake lobby, open one of six patient rooms, inspect all required evidence hotspots, and submit a diagnosis with supporting rationale before the timer expires.
+Diagnostic Clinic Simulator is a SCORM 1.2-compatible React + Vite learning experience for MFT 5305. Learners begin on a cover page, review launch instructions, enter a 360-degree hospital intake lobby, open one of six patient rooms, inspect all required evidence hotspots, and submit a diagnosis with supporting rationale before the timer expires.
 
 ## Current build highlights
 
-- Primitive-geometry hospital intake lobby created directly in React Three Fiber
-- Reusable inpatient hospital room scene with six case-driven variants
+- 360-degree lobby panorama with clickable patient-room door hotspots
+- Six 360-degree patient room panoramas mapped to case-driven room variants
 - Case-file overlay before room entry
 - Six required hotspots per patient room:
   - Patient Interview
@@ -21,11 +21,13 @@ Diagnostic Clinic Simulator is a SCORM 1.2-compatible React + Vite learning expe
 ## Project structure
 
 - `src/App.jsx`: main simulation flow, timer, progress state, and overlays
-- `src/components/LobbyScene.jsx`: primitive-built intake lobby and hallway scene
-- `src/components/PatientRoomScene.jsx`: reusable primitive-built inpatient room scene
+- `src/components/PanoramaViewer.jsx`: reusable 360-degree panorama viewer and hotspot renderer
+- `src/components/LobbyScene.jsx`: lobby panorama with six clickable door hotspots
+- `src/components/PatientRoomScene.jsx`: patient-room panorama wrapper with hotspot placement
 - `src/data/cases.json`: learner-facing patient case data
 - `src/data/answerKey.json`: instructor-only diagnosis key and scoring references
 - `src/lib/scorm.js`: lightweight SCORM 1.2 runtime wrapper
+- `public/assets/`: panorama PNGs served at `/assets/FILENAME.png`
 - `public/imsmanifest.xml`: SCORM package manifest copied into `dist/`
 
 ## Local development
@@ -79,7 +81,7 @@ Update `src/data/cases.json` to change learner-facing content. Each case include
 - `hotspots`
 - `completionRequired`
 
-Each hotspot entry should map to one of the room anchors already supported by the 3D room scene:
+Each hotspot entry should map to one of the room anchors already supported by the panorama room scene:
 
 - `patient`
 - `chart`
@@ -111,6 +113,18 @@ Update `src/data/answerKey.json` for instructor-only grading references. Each en
 - `ruleOuts`
 
 Learners do not see this file in the simulation UI.
+
+## Panorama assets
+
+Panorama images are stored in `public/assets` and referenced by absolute Vite-safe paths such as `/assets/Lobby.png`.
+
+This is the cleanest option for this project because:
+
+- the same image paths work in local dev
+- the same files are copied automatically into `dist/`
+- SCORM packaging includes them without extra import logic
+
+If you replace a panorama, keep the filename stable or update the mapping in `src/components/LobbyScene.jsx` or `src/components/PatientRoomScene.jsx`.
 
 ## SCORM 1.2 notes
 
