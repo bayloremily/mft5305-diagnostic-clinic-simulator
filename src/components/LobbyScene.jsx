@@ -3,12 +3,12 @@ import { PanoramaViewer } from './PanoramaViewer'
 const LOBBY_IMAGE_PATH = '/assets/Lobby.png'
 
 const LOBBY_DOOR_HOTSPOTS = [
-  { id: 'patient-1', yaw: 42, pitch: -5 },
-  { id: 'patient-2', yaw: 50, pitch: -4 },
-  { id: 'patient-3', yaw: 58, pitch: -3 },
-  { id: 'patient-4', yaw: 66, pitch: -2 },
-  { id: 'patient-5', yaw: 74, pitch: -1 },
-  { id: 'patient-6', yaw: 82, pitch: 0 },
+  { id: 'patient-1', yaw: 68, pitch: -4 },
+  { id: 'patient-2', yaw: 80, pitch: -5 },
+  { id: 'patient-3', yaw: 92, pitch: -5 },
+  { id: 'patient-4', yaw: 108, pitch: -4 },
+  { id: 'patient-5', yaw: 122, pitch: -4 },
+  { id: 'patient-6', yaw: 138, pitch: -3 },
 ]
 
 export function LobbyScene({ cases, caseStates, onHotspotClick, showHotspots = true }) {
@@ -26,7 +26,7 @@ export function LobbyScene({ cases, caseStates, onHotspotClick, showHotspots = t
     id: 'instructions',
     label: 'Instructions',
     yaw: 0,
-    pitch: -8,
+    pitch: 10,
     variant: 'desk',
     labelMode: 'hover',
   })

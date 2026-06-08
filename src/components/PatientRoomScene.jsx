@@ -19,8 +19,10 @@ const ROOM_HOTSPOT_COORDINATES = {
     environment: { yaw: -42, pitch: -5 },
   },
   1: {
-    patient: { yaw: 6, pitch: -5 },
-    chart: { yaw: 96, pitch: -8 },
+    patient: { yaw: -48, pitch: -11 },
+    chart: { yaw: -132, pitch: -9 },
+    monitor: { yaw: -148, pitch: 8 },
+    bulletin: { yaw: 145, pitch: 12 },
   },
   2: {
     environment: { yaw: -36, pitch: -5 },
