@@ -255,6 +255,14 @@ function App() {
   const timerMessage = getTimerMessage(remainingSeconds)
   const scoreSummary = getScoreSummary(simState)
   const learnerPassed = allRoomsComplete && scoreSummary.score >= answerKey.passingScore
+  const currentLocationLabel =
+    displayPhase === 'room' || displayPhase === 'synopsis'
+      ? `Patient ${activeCase?.patientNumber ?? ''}`.trim()
+      : displayPhase === 'timeout'
+        ? 'Time Expired'
+        : displayPhase === 'complete'
+          ? 'Simulation Complete'
+          : 'Lobby'
   const lessonStatus = getLessonStatus({
     launched: simState.launched,
     learnerPassed,
@@ -558,7 +566,7 @@ function App() {
           </p>
         </div>
 
-        <div className="status-cluster">
+        <div className="status-cluster learner-status-cluster">
           <div className={`timer-card ${timerState}`}>
             <span>Time Remaining</span>
             <strong>{formatRemainingTime(remainingSeconds)}</strong>
@@ -571,11 +579,6 @@ function App() {
             </strong>
             <small>{simState.activeCaseId ? `Current room: Patient ${activeCase?.patientNumber}` : 'Lobby overview'}</small>
           </div>
-          <div className="mini-card">
-            <span>SCORM 1.2</span>
-            <strong>{startup.connected ? 'Connected' : 'Local fallback'}</strong>
-            <small>{lessonStatus}</small>
-          </div>
         </div>
       </header>
 
@@ -584,32 +587,16 @@ function App() {
           <div className="panel">
             <h2>Global Progress</h2>
             <p className="panel-copy">
-              Completed rooms stay marked in the hallway and in this checklist. Every patient requires all six
-              hotspots plus a diagnosis submission.
+              Room completion still updates as learners progress through the hospital floor.
             </p>
-            <ul className="room-list">
-              {casesData.cases.map((caseItem) => {
-                const caseState = simState.cases[caseItem.id]
-                const progress = getCaseProgress(caseItem, caseState)
-
-                return (
-                  <li key={caseItem.id} className={simState.activeCaseId === caseItem.id ? 'active' : ''}>
-                    <button
-                      type="button"
-                      onClick={() => openSynopsis(caseItem.id)}
-                      disabled={remainingSeconds === 0 || displayPhase === 'timeout'}
-                    >
-                      <span>{`Patient ${caseItem.patientNumber}: ${caseItem.patientName}`}</span>
-                      <small>
-                        {caseState.completed
-                          ? 'Complete'
-                          : `${progress.exploredRequiredCount} of ${progress.totalRequiredCount} explored`}
-                      </small>
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
+            <div className="progress-summary">
+              <p>
+                <strong>Patients Completed:</strong> {completedRooms} / {casesData.cases.length}
+              </p>
+              <p>
+                <strong>Current Location:</strong> {currentLocationLabel}
+              </p>
+            </div>
           </div>
 
           <div className="panel">
@@ -618,7 +605,7 @@ function App() {
               Auto-graded diagnosis score: <strong>{scoreSummary.score}%</strong>
             </p>
             <p className="panel-copy">
-              Matching diagnoses count toward the SCORM score. Supporting evidence and rule-outs remain available for
+              Matching diagnoses count toward the final score. Supporting evidence and rule-outs remain available for
               instructor review outside the learner-facing scene.
             </p>
           </div>
@@ -739,8 +726,7 @@ function App() {
               </div>
 
               <div className="room-sidebar">
-                <div className="panel">
-                  <h2>Accessible Hotspot List</h2>
+                <div className="visually-hidden">
                   <ul className="hotspot-list">
                     {activeCase.hotspots.map((hotspot) => (
                       <li key={hotspot.id}>
@@ -815,8 +801,8 @@ function App() {
               <p className="eyebrow">Time Expired</p>
               <h2>Clinical Window Closed</h2>
               <p className="panel-copy">
-                The 2.5-hour timer has ended. Progress has been saved with {startup.connected ? 'SCORM 1.2' : 'local'}{' '}
-                persistence, including hotspot exploration and any submitted patient assessments.
+                The 2.5-hour timer has ended. Progress has been saved, including hotspot exploration and any submitted
+                patient assessments.
               </p>
               <p className="score-line">
                 Patients completed: <strong>{completedRooms} / 6</strong>
@@ -830,7 +816,7 @@ function App() {
               <h2>All Six Patients Submitted</h2>
               <p className="panel-copy">
                 Final diagnosis score: {scoreSummary.score}% ({scoreSummary.matchedCount} of 6 matched the instructor
-                key). SCORM lesson status is now reporting as <strong>{lessonStatus}</strong>.
+                key).
               </p>
             </section>
           )}
