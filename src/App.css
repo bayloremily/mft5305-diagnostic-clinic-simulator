@@ -718,8 +718,23 @@ textarea {
 
 .room-ui {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(21rem, 0.8fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(24rem, 0.92fr);
   gap: 1rem;
+  align-items: start;
+}
+
+.room-main {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.room-content-grid {
+  grid-template-columns: 1fr;
+}
+
+.room-sidebar {
+  align-self: start;
 }
 
 .room-header,

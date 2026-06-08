@@ -707,7 +707,7 @@ function App() {
 
           {displayPhase === 'room' && activeCase && activeCaseState && (
             <section className="overlay-card room-ui">
-              <div>
+              <div className="room-main">
                 <div className="room-header">
                   <div>
                     <p className="eyebrow">Active Room</p>
@@ -725,7 +725,7 @@ function App() {
                   </div>
                 </div>
 
-                <div className="content-grid">
+                <div className="content-grid room-content-grid">
                   <article className="detail-card">
                     <small>Patient synopsis</small>
                     <p>{activeCase.synopsis}</p>
