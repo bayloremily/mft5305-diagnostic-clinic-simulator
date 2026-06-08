@@ -1,5 +1,6 @@
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, RoundedBox, Text } from '@react-three/drei'
+import { Html, OrbitControls, RoundedBox, Text } from '@react-three/drei'
 
 function Plant({ position }) {
   return (
@@ -124,17 +125,24 @@ function WallSign({ position, text, width = 2.8 }) {
 export function LobbyScene({ cases, caseStates, onSelectRoom }) {
   return (
     <Canvas camera={{ position: [0, 7.8, 18], fov: 42 }}>
-      <color attach="background" args={['#dce6e5']} />
-      <fog attach="fog" args={['#dce6e5', 16, 34]} />
-      <ambientLight intensity={1.3} />
-      <directionalLight position={[6, 12, 7]} intensity={2} color="#ffffff" />
-      <pointLight position={[-8, 4, -3]} intensity={0.8} color="#f2d890" />
-      <pointLight position={[0, 5, -8]} intensity={0.65} color="#9fc3ba" />
+      <Suspense
+        fallback={
+          <Html center>
+            <div className="scene-fallback">Loading 3D hospital lobby...</div>
+          </Html>
+        }
+      >
+        <color attach="background" args={['#dce6e5']} />
+        <fog attach="fog" args={['#dce6e5', 16, 34]} />
+        <ambientLight intensity={1.3} />
+        <directionalLight position={[6, 12, 7]} intensity={2} color="#ffffff" />
+        <pointLight position={[-8, 4, -3]} intensity={0.8} color="#f2d890" />
+        <pointLight position={[0, 5, -8]} intensity={0.65} color="#9fc3ba" />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[30, 24]} />
-        <meshStandardMaterial color="#d6ddd9" />
-      </mesh>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[30, 24]} />
+          <meshStandardMaterial color="#d6ddd9" />
+        </mesh>
 
       <mesh position={[0, 4.55, -10]}>
         <boxGeometry args={[30, 9.1, 0.35]} />
@@ -218,14 +226,15 @@ export function LobbyScene({ cases, caseStates, onSelectRoom }) {
         Family Waiting
       </Text>
 
-      <OrbitControls
-        enablePan={false}
-        minPolarAngle={0.95}
-        maxPolarAngle={1.42}
-        minDistance={13}
-        maxDistance={23}
-        target={[0, 2.4, -2]}
-      />
+        <OrbitControls
+          enablePan={false}
+          minPolarAngle={0.95}
+          maxPolarAngle={1.42}
+          minDistance={13}
+          maxDistance={23}
+          target={[0, 2.4, -2]}
+        />
+      </Suspense>
     </Canvas>
   )
 }

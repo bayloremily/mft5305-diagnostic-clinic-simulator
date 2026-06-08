@@ -2,12 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>diagnostic-clinic-simulator</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-fallback" role="status" aria-live="polite">
+        <h1>Diagnostic Clinic Simulator</h1>
+        <p>Loading the hospital floor simulation...</p>
+        <p>If this message stays on screen, the app did not finish booting.</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

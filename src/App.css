@@ -19,6 +19,53 @@
   box-sizing: border-box;
 }
 
+.boot-fallback,
+.app-error-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.boot-fallback,
+.app-error-card,
+.scene-fallback {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.boot-fallback {
+  max-width: 34rem;
+  text-align: center;
+  padding: 1.6rem;
+}
+
+.boot-fallback h1,
+.app-error-card h1 {
+  margin: 0 0 0.8rem;
+  font-family: 'Avenir Next', 'Trebuchet MS', 'Gill Sans', sans-serif;
+}
+
+.app-error-card {
+  max-width: 48rem;
+  padding: 1.6rem;
+}
+
+.app-error-card pre {
+  overflow: auto;
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(23, 50, 45, 0.06);
+}
+
+.scene-fallback {
+  padding: 0.8rem 1rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
 body {
   margin: 0;
   background:
@@ -430,6 +477,11 @@ textarea {
   border: 1px solid var(--line);
   background: linear-gradient(180deg, #f8fbf9, #e7eeeb);
   box-shadow: var(--shadow);
+}
+
+.canvas-card canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .synopsis-card {

@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "package:scorm": "rm -f diagnostic-clinic-simulator-scorm12.zip && npm run build && find dist -name '._*' -delete && cd dist && COPYFILE_DISABLE=1 zip -X -r ../diagnostic-clinic-simulator-scorm12.zip .",
+    "build:scorm": "vite build --mode scorm",
+    "package:scorm": "rm -f diagnostic-clinic-simulator-scorm12.zip && npm run build:scorm && find dist -name '._*' -delete && cd dist && COPYFILE_DISABLE=1 zip -X -r ../diagnostic-clinic-simulator-scorm12.zip .",
     "clean:mac": "find . -name '._*' -delete"
   },
   "dependencies": {

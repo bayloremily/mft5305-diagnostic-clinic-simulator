@@ -2,11 +2,24 @@ html {
   font-family: 'Avenir Next', 'Trebuchet MS', 'Segoe UI', sans-serif;
 }
 
+html,
 body,
 #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
   min-height: 100vh;
 }
 
 a {
   color: inherit;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

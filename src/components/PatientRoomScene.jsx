@@ -1,5 +1,6 @@
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, RoundedBox, Text } from '@react-three/drei'
+import { Html, OrbitControls, RoundedBox, Text } from '@react-three/drei'
 
 const HOTSPOT_ANCHORS = {
   patient: [-1.45, 1.95, -0.3],
@@ -152,12 +153,19 @@ export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick })
 
   return (
     <Canvas camera={{ position: [0.9, 4.8, 10.5], fov: 42 }}>
-      <color attach="background" args={['#dfe8e8']} />
-      <fog attach="fog" args={['#dfe8e8', 12, 22]} />
-      <ambientLight intensity={1.15} />
-      <directionalLight position={[5, 8, 6]} intensity={1.7} color={roomVariant.lightingColor} />
-      <pointLight position={[-2.5, 4.8, 1.2]} intensity={1.1} color={roomVariant.lightingColor} />
-      <pointLight position={[4.4, 3.2, -1.8]} intensity={0.5} color={roomVariant.accentColor} />
+      <Suspense
+        fallback={
+          <Html center>
+            <div className="scene-fallback">Loading 3D patient room...</div>
+          </Html>
+        }
+      >
+        <color attach="background" args={['#dfe8e8']} />
+        <fog attach="fog" args={['#dfe8e8', 12, 22]} />
+        <ambientLight intensity={1.15} />
+        <directionalLight position={[5, 8, 6]} intensity={1.7} color={roomVariant.lightingColor} />
+        <pointLight position={[-2.5, 4.8, 1.2]} intensity={1.1} color={roomVariant.lightingColor} />
+        <pointLight position={[4.4, 3.2, -1.8]} intensity={0.5} color={roomVariant.accentColor} />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[14, 12]} />
@@ -295,14 +303,15 @@ export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick })
         />
       ))}
 
-      <OrbitControls
-        enablePan={false}
-        minPolarAngle={0.95}
-        maxPolarAngle={1.52}
-        minDistance={7.8}
-        maxDistance={12.5}
-        target={[0, 2.1, 0]}
-      />
+        <OrbitControls
+          enablePan={false}
+          minPolarAngle={0.95}
+          maxPolarAngle={1.52}
+          minDistance={7.8}
+          maxDistance={12.5}
+          target={[0, 2.1, 0]}
+        />
+      </Suspense>
     </Canvas>
   )
 }
