@@ -723,24 +723,12 @@ function App() {
                       {getCaseProgress(activeCase, activeCaseState).totalRequiredCount} explored
                     </strong>
                   </div>
-                  <div>
-                    <span>Room Unlock</span>
-                    <strong>
-                      {getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit
-                        ? 'Diagnosis panel unlocked'
-                        : 'Explore all required hotspots'}
-                    </strong>
-                  </div>
                 </div>
 
                 <div className="content-grid">
                   <article className="detail-card">
                     <small>Patient synopsis</small>
                     <p>{activeCase.synopsis}</p>
-                  </article>
-                  <article className="detail-card">
-                    <small>Room variant clue</small>
-                    <p>{activeCase.roomVariant.environmentalCue}</p>
                   </article>
                 </div>
               </div>
