@@ -259,7 +259,6 @@ function App() {
   })
   const hasPanoramaOverlay =
     displayPhase === 'synopsis' ||
-    (displayPhase === 'room' && activeCase) ||
     lobbyOverlay === 'instructions' ||
     Boolean(selectedRoomHotspot)
 
@@ -602,6 +601,12 @@ function App() {
               <LobbyScene cases={casesData.cases} caseStates={simState.cases} onHotspotClick={handleLobbyHotspotOpen} />
             )}
 
+            {displayPhase === 'room' && activeCase && (
+              <button type="button" className="ghost panorama-back-button" onClick={returnToLobby}>
+                Back to Lobby
+              </button>
+            )}
+
             {displayPhase === 'synopsis' && activeCase && (
               <>
                 <div className="panorama-overlay-backdrop" />
@@ -637,120 +642,20 @@ function App() {
             )}
 
             {displayPhase === 'room' && activeCase && activeCaseState && (
-              <>
-                <div className="panorama-overlay-backdrop" />
-                <section className="overlay-card room-ui is-panorama-docked">
-                  <div>
-                    <div className="room-header">
-                      <div>
-                        <p className="eyebrow">Active Room</p>
-                        <h2>{`Patient ${activeCase.patientNumber}: ${activeCase.patientName}`}</h2>
-                      </div>
-                      <button type="button" className="ghost" onClick={returnToLobby}>
-                        Back to Lobby
+              <div className="visually-hidden">
+                <ul className="hotspot-list">
+                  {activeCase.hotspots.map((hotspot) => (
+                    <li key={hotspot.id}>
+                      <button type="button" onClick={() => handleHotspotOpen(hotspot.id)} className="hotspot-button">
+                        <span>{hotspot.label}</span>
+                        <small>
+                          {activeCaseState.exploredHotspots.includes(hotspot.id) ? 'Explored' : 'Open hotspot'}
+                        </small>
                       </button>
-                    </div>
-
-                    <div className="checklist-strip">
-                      <div>
-                        <span>Checklist</span>
-                        <strong>
-                          {getCaseProgress(activeCase, activeCaseState).exploredRequiredCount} of{' '}
-                          {getCaseProgress(activeCase, activeCaseState).totalRequiredCount} explored
-                        </strong>
-                      </div>
-                      <div>
-                        <span>Room Unlock</span>
-                        <strong>
-                          {getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit
-                            ? 'Diagnosis panel unlocked'
-                            : 'Explore all required hotspots'}
-                        </strong>
-                      </div>
-                    </div>
-
-                    <div className="content-grid">
-                      <article className="detail-card">
-                        <small>Patient synopsis</small>
-                        <p>{activeCase.synopsis}</p>
-                      </article>
-                      <article className="detail-card">
-                        <small>Room variant clue</small>
-                        <p>{activeCase.roomVariant.environmentalCue}</p>
-                      </article>
-                    </div>
-                  </div>
-
-                  <div className="room-sidebar">
-                    <div className="visually-hidden">
-                      <ul className="hotspot-list">
-                        {activeCase.hotspots.map((hotspot) => (
-                          <li key={hotspot.id}>
-                            <button type="button" onClick={() => handleHotspotOpen(hotspot.id)} className="hotspot-button">
-                              <span>{hotspot.label}</span>
-                              <small>
-                                {activeCaseState.exploredHotspots.includes(hotspot.id) ? 'Explored' : 'Open hotspot'}
-                              </small>
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <form className="panel diagnosis-card" onSubmit={handleDiagnosisSubmit}>
-                      <h2>Diagnosis Submission</h2>
-                      <label>
-                        <span>Diagnosis</span>
-                        <select
-                          value={activeCaseState.diagnosis}
-                          onChange={(event) => handleDiagnosisChange(event.target.value)}
-                          disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
-                        >
-                          <option value="">Select a diagnosis</option>
-                          {activeCase.diagnosisOptions.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-
-                      <label>
-                        <span>Supporting evidence / rationale</span>
-                        <textarea
-                          rows={5}
-                          value={activeCaseState.rationale}
-                          onChange={(event) => handleRationaleChange(event.target.value)}
-                          disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
-                        />
-                      </label>
-
-                      <label>
-                        <span>Rule-outs / differential notes</span>
-                        <textarea
-                          rows={4}
-                          value={activeCaseState.ruleOuts}
-                          onChange={(event) => handleRuleOutsChange(event.target.value)}
-                          disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
-                        />
-                      </label>
-
-                      <button
-                        type="submit"
-                        disabled={
-                          !getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit ||
-                          !activeCaseState.diagnosis ||
-                          !activeCaseState.rationale.trim() ||
-                          !activeCaseState.ruleOuts.trim() ||
-                          remainingSeconds === 0
-                        }
-                      >
-                        Submit Patient Assessment
-                      </button>
-                    </form>
-                  </div>
-                </section>
-              </>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
 
             {lobbyOverlay === 'instructions' && (
@@ -799,6 +704,102 @@ function App() {
               </>
             )}
           </div>
+
+          {displayPhase === 'room' && activeCase && activeCaseState && (
+            <section className="overlay-card room-ui">
+              <div>
+                <div className="room-header">
+                  <div>
+                    <p className="eyebrow">Active Room</p>
+                    <h2>{`Patient ${activeCase.patientNumber}: ${activeCase.patientName}`}</h2>
+                  </div>
+                </div>
+
+                <div className="checklist-strip">
+                  <div>
+                    <span>Checklist</span>
+                    <strong>
+                      {getCaseProgress(activeCase, activeCaseState).exploredRequiredCount} of{' '}
+                      {getCaseProgress(activeCase, activeCaseState).totalRequiredCount} explored
+                    </strong>
+                  </div>
+                  <div>
+                    <span>Room Unlock</span>
+                    <strong>
+                      {getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit
+                        ? 'Diagnosis panel unlocked'
+                        : 'Explore all required hotspots'}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="content-grid">
+                  <article className="detail-card">
+                    <small>Patient synopsis</small>
+                    <p>{activeCase.synopsis}</p>
+                  </article>
+                  <article className="detail-card">
+                    <small>Room variant clue</small>
+                    <p>{activeCase.roomVariant.environmentalCue}</p>
+                  </article>
+                </div>
+              </div>
+
+              <div className="room-sidebar">
+                <form className="panel diagnosis-card" onSubmit={handleDiagnosisSubmit}>
+                  <h2>Diagnosis Submission</h2>
+                  <label>
+                    <span>Diagnosis</span>
+                    <select
+                      value={activeCaseState.diagnosis}
+                      onChange={(event) => handleDiagnosisChange(event.target.value)}
+                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
+                    >
+                      <option value="">Select a diagnosis</option>
+                      {activeCase.diagnosisOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label>
+                    <span>Supporting evidence / rationale</span>
+                    <textarea
+                      rows={5}
+                      value={activeCaseState.rationale}
+                      onChange={(event) => handleRationaleChange(event.target.value)}
+                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
+                    />
+                  </label>
+
+                  <label>
+                    <span>Rule-outs / differential notes</span>
+                    <textarea
+                      rows={4}
+                      value={activeCaseState.ruleOuts}
+                      onChange={(event) => handleRuleOutsChange(event.target.value)}
+                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
+                    />
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={
+                      !getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit ||
+                      !activeCaseState.diagnosis ||
+                      !activeCaseState.rationale.trim() ||
+                      !activeCaseState.ruleOuts.trim() ||
+                      remainingSeconds === 0
+                    }
+                  >
+                    Submit Patient Assessment
+                  </button>
+                </form>
+              </div>
+            </section>
+          )}
 
           {displayPhase === 'timeout' && (
             <section className="overlay-card center-card danger-card">

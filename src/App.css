@@ -517,6 +517,13 @@ textarea {
   height: 100% !important;
 }
 
+.panorama-back-button {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 2;
+}
+
 .panorama-hotspot {
   position: relative;
   border: 0;
@@ -702,13 +709,6 @@ textarea {
   gap: 1rem;
 }
 
-.overlay-card.is-panorama-docked {
-  position: absolute;
-  inset: 1rem;
-  z-index: 4;
-  overflow: auto;
-}
-
 .room-header,
 .detail-header {
   display: flex;
@@ -802,11 +802,12 @@ textarea {
     height: 54vh;
   }
 
-  .overlay-card.is-panorama-modal {
-    inset: 0.75rem;
+  .panorama-back-button {
+    left: 0.75rem;
+    top: 0.75rem;
   }
 
-  .overlay-card.is-panorama-docked {
+  .overlay-card.is-panorama-modal {
     inset: 0.75rem;
   }
 
