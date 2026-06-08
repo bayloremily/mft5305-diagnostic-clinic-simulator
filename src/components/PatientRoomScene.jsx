@@ -63,12 +63,6 @@ export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick })
       hotspots={hotspots}
       exploredHotspotIds={exploredHotspots}
       onHotspotClick={onHotspotClick}
-      title={`Patient ${caseData.patientNumber}: ${caseData.patientName}`}
-      subtitle={`${caseData.patientAge} • ${caseData.roomVariant.lightingTone}`}
-      titleYaw={180}
-      titlePitch={30}
-      subtitleYaw={180}
-      subtitlePitch={24}
     />
   )
 }

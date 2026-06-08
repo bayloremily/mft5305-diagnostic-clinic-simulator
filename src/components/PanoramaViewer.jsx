@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Html, OrbitControls, Text, useTexture } from '@react-three/drei'
+import { Html, OrbitControls, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 
 function degreesToSpherePosition(yaw, pitch, radius = 9.7) {
@@ -90,12 +90,6 @@ export function PanoramaViewer({
   hotspots,
   exploredHotspotIds = [],
   onHotspotClick,
-  title,
-  subtitle,
-  titleYaw = 180,
-  titlePitch = 30,
-  subtitleYaw = 180,
-  subtitlePitch = 24,
 }) {
   const imageStatus = useImageStatus(imagePath)
 
@@ -106,9 +100,6 @@ export function PanoramaViewer({
   if (imageStatus === 'loading') {
     return <div className="scene-fallback">{loadingText}</div>
   }
-
-  const titlePosition = degreesToSpherePosition(titleYaw, titlePitch, 7)
-  const subtitlePosition = degreesToSpherePosition(subtitleYaw, subtitlePitch, 7)
 
   return (
     <Canvas camera={{ position: [0, 0, 0.1], fov: 72 }}>
@@ -122,18 +113,6 @@ export function PanoramaViewer({
         <ambientLight intensity={1.2} />
         <pointLight position={[0, 3, 0]} intensity={0.35} color="#fff5de" />
         <PanoramaSphere imagePath={imagePath} />
-
-        {title && (
-          <Text position={titlePosition} fontSize={0.46} color="#f4faf8" anchorX="center">
-            {title}
-          </Text>
-        )}
-
-        {subtitle && (
-          <Text position={subtitlePosition} fontSize={0.22} color="#d8ebe3" anchorX="center">
-            {subtitle}
-          </Text>
-        )}
 
         {hotspots.map((hotspot) => (
           <PanoramaHotspot

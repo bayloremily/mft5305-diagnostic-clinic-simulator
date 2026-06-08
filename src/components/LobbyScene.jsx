@@ -41,12 +41,6 @@ export function LobbyScene({ cases, caseStates, onHotspotClick }) {
       hotspots={hotspots}
       exploredHotspotIds={exploredHotspotIds}
       onHotspotClick={onHotspotClick}
-      title="Diagnostic Clinic Lobby"
-      subtitle="Drag to look around the hall. Click a patient room door to begin."
-      titleYaw={180}
-      titlePitch={31}
-      subtitleYaw={180}
-      subtitlePitch={25}
     />
   )
 }
