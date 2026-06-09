@@ -10,11 +10,16 @@ import { buildCaseHotspots, buildLobbyHotspots } from './lib/roomHotspots'
 const TOTAL_SECONDS = 2.5 * 60 * 60
 const DEV_DISABLE_TIMER = false
 const DEV_AUTHOR_MODE = false
+const DEV_SHOW_TIMER_RESET = true
 const STORAGE_KEY = 'diagnostic-clinic-simulator-state'
 const AUTHOR_STORAGE_KEY = 'diagnostic-clinic-simulator-author-hotspots'
 
 function getDeveloperToolsEnabled() {
   return import.meta.env.DEV && DEV_AUTHOR_MODE
+}
+
+function getTimerResetEnabled() {
+  return import.meta.env.DEV && DEV_SHOW_TIMER_RESET
 }
 
 function buildRoomKey(caseItem) {
@@ -327,6 +332,7 @@ function App() {
   const [selectedHotspotId, setSelectedHotspotId] = useState(null)
   const [lobbyOverlay, setLobbyOverlay] = useState(null)
   const [developerToolsEnabled] = useState(() => getDeveloperToolsEnabled())
+  const [timerResetEnabled] = useState(() => getTimerResetEnabled())
   const [authorMode, setAuthorMode] = useState(false)
   const [authorHotspotsByRoom, setAuthorHotspotsByRoom] = useState(() => {
     const defaultHotspotsByRoom = buildInitialAuthorHotspotsByRoom()
@@ -467,6 +473,19 @@ function App() {
       launched: true,
       phase: 'lobby',
       timerEndsAt: timerDisabled ? currentState.timerEndsAt : currentState.timerEndsAt ?? Date.now() + TOTAL_SECONDS * 1000,
+    }))
+  }
+
+  function handleResetTimer() {
+    if (!timerResetEnabled || !simState.launched) {
+      return
+    }
+
+    const nextNow = Date.now()
+    setClockNow(nextNow)
+    setSimState((currentState) => ({
+      ...currentState,
+      timerEndsAt: nextNow + TOTAL_SECONDS * 1000,
     }))
   }
 
@@ -820,19 +839,28 @@ function App() {
           </p>
         </div>
 
-        <div className="status-cluster learner-status-cluster">
-          <div className={`timer-card ${timerState}`}>
-            <span>Time Remaining</span>
-            <strong>{timerDisabled ? 'Timer Disabled' : formatRemainingTime(remainingSeconds)}</strong>
-            <small>{timerMessage}</small>
+        <div className="status-stack">
+          <div className="status-cluster learner-status-cluster">
+            <div className={`timer-card ${timerState}`}>
+              <span>Time Remaining</span>
+              <strong>{timerDisabled ? 'Timer Disabled' : formatRemainingTime(remainingSeconds)}</strong>
+              <small>{timerMessage}</small>
+            </div>
+            <div className="mini-card">
+              <span>Patients Completed</span>
+              <strong>
+                {completedRooms} / {casesData.cases.length}
+              </strong>
+              <small>{simState.activeCaseId ? `Current room: Patient ${activeCase?.patientNumber}` : 'Lobby overview'}</small>
+            </div>
           </div>
-          <div className="mini-card">
-            <span>Patients Completed</span>
-            <strong>
-              {completedRooms} / {casesData.cases.length}
-            </strong>
-            <small>{simState.activeCaseId ? `Current room: Patient ${activeCase?.patientNumber}` : 'Lobby overview'}</small>
-          </div>
+          {timerResetEnabled && simState.launched && (
+            <div className="dev-timer-row">
+              <button type="button" className="ghost dev-timer-button" onClick={handleResetTimer}>
+                Reset Timer
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
