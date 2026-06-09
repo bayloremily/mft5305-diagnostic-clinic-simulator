@@ -1,0 +1,50 @@
+{
+  "room1": {
+    "patient-interview": { "yaw": -48, "pitch": -11 },
+    "intake-chart": { "yaw": -132, "pitch": -9 },
+    "observation-notes": { "yaw": -148, "pitch": 8 },
+    "medication-history": { "yaw": 58, "pitch": -5 },
+    "collateral-note": { "yaw": 145, "pitch": 12 },
+    "environmental-observation": { "yaw": -42, "pitch": -5 }
+  },
+  "room2": {
+    "patient-interview": { "yaw": 0, "pitch": -6 },
+    "intake-chart": { "yaw": 105, "pitch": -8 },
+    "observation-notes": { "yaw": 18, "pitch": 8 },
+    "medication-history": { "yaw": 58, "pitch": -5 },
+    "collateral-note": { "yaw": -82, "pitch": 6 },
+    "environmental-observation": { "yaw": -36, "pitch": -5 }
+  },
+  "room3": {
+    "patient-interview": { "yaw": 0, "pitch": -6 },
+    "intake-chart": { "yaw": 105, "pitch": -8 },
+    "observation-notes": { "yaw": 24, "pitch": 9 },
+    "medication-history": { "yaw": 58, "pitch": -5 },
+    "collateral-note": { "yaw": -82, "pitch": 6 },
+    "environmental-observation": { "yaw": -42, "pitch": -5 }
+  },
+  "room4": {
+    "patient-interview": { "yaw": 0, "pitch": -6 },
+    "intake-chart": { "yaw": 105, "pitch": -8 },
+    "observation-notes": { "yaw": 18, "pitch": 8 },
+    "medication-history": { "yaw": 58, "pitch": -5 },
+    "collateral-note": { "yaw": -88, "pitch": 8 },
+    "environmental-observation": { "yaw": -42, "pitch": -5 }
+  },
+  "room5": {
+    "patient-interview": { "yaw": 0, "pitch": -6 },
+    "intake-chart": { "yaw": 105, "pitch": -8 },
+    "observation-notes": { "yaw": 18, "pitch": 8 },
+    "medication-history": { "yaw": 62, "pitch": -6 },
+    "collateral-note": { "yaw": -82, "pitch": 6 },
+    "environmental-observation": { "yaw": -42, "pitch": -5 }
+  },
+  "room6": {
+    "patient-interview": { "yaw": -6, "pitch": -6 },
+    "intake-chart": { "yaw": 105, "pitch": -8 },
+    "observation-notes": { "yaw": 18, "pitch": 8 },
+    "medication-history": { "yaw": 58, "pitch": -5 },
+    "collateral-note": { "yaw": -82, "pitch": 6 },
+    "environmental-observation": { "yaw": -42, "pitch": -5 }
+  }
+}

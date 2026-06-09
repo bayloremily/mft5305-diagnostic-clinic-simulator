@@ -119,12 +119,14 @@ button:hover:not(:disabled) {
 }
 
 button:disabled,
+input:disabled,
 select:disabled,
 textarea:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
 
+input,
 select,
 textarea {
   width: 100%;
@@ -557,6 +559,15 @@ textarea {
   background: rgba(79, 137, 98, 0.95);
 }
 
+.panorama-hotspot.is-author .panorama-hotspot-marker {
+  background: rgba(52, 102, 193, 0.95);
+}
+
+.panorama-hotspot.is-selected .panorama-hotspot-marker {
+  box-shadow: 0 0 0 8px rgba(38, 88, 181, 0.24);
+  transform: scale(1.12);
+}
+
 .panorama-hotspot:focus-visible {
   outline: none;
 }
@@ -758,6 +769,136 @@ textarea {
 .diagnosis-card label {
   display: grid;
   gap: 0.55rem;
+}
+
+.author-panel {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.author-toolbar-panel {
+  display: grid;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.author-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.author-toolbar button {
+  padding: 0.65rem 0.9rem;
+}
+
+.author-toolbar-details {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.author-toolbar-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.author-panel.is-on {
+  border-color: rgba(38, 88, 181, 0.28);
+}
+
+.author-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.author-panel-header button[aria-pressed='true'] {
+  border-color: rgba(38, 88, 181, 0.32);
+  background: rgba(38, 88, 181, 0.1);
+}
+
+.author-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.author-status {
+  margin: 0;
+  color: var(--muted);
+}
+
+.author-debug-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background: rgba(38, 88, 181, 0.08);
+  border: 1px solid rgba(38, 88, 181, 0.16);
+}
+
+.author-hotspot-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.author-hotspot-list li {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(27, 58, 49, 0.1);
+  background: rgba(247, 250, 248, 0.7);
+}
+
+.author-hotspot-list li.is-selected {
+  border-color: rgba(38, 88, 181, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(38, 88, 181, 0.12);
+}
+
+.author-hotspot-select {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.author-hotspot-select span,
+.author-hotspot-select small {
+  display: block;
+}
+
+.author-coordinate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.author-coordinate-grid label,
+.author-hotspot-list label,
+.author-json-block {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.author-delete-button {
+  justify-self: start;
+}
+
+.author-json-block textarea {
+  min-height: 14rem;
+  font-family: 'SFMono-Regular', 'Menlo', monospace;
+  font-size: 0.85rem;
 }
 
 .center-card {

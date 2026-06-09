@@ -2,16 +2,15 @@ import { Suspense, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Html, OrbitControls, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
+import { degreesToSpherePosition } from '../lib/panoramaMath'
 
-function degreesToSpherePosition(yaw, pitch, radius = 9.7) {
-  const yawRadians = THREE.MathUtils.degToRad(yaw)
-  const pitchRadians = THREE.MathUtils.degToRad(pitch)
+function spherePositionToDegrees(point) {
+  const normalizedPoint = point.clone().normalize()
 
-  return [
-    radius * Math.sin(yawRadians) * Math.cos(pitchRadians),
-    radius * Math.sin(pitchRadians),
-    -radius * Math.cos(yawRadians) * Math.cos(pitchRadians),
-  ]
+  return {
+    yaw: Number(THREE.MathUtils.radToDeg(Math.atan2(normalizedPoint.x, -normalizedPoint.z)).toFixed(2)),
+    pitch: Number(THREE.MathUtils.radToDeg(Math.asin(normalizedPoint.y)).toFixed(2)),
+  }
 }
 
 function useImageStatus(src) {
@@ -54,11 +53,18 @@ function PanoramaSphere({ imagePath }) {
   )
 }
 
-function PanoramaHotspot({ hotspot, explored, onClick }) {
+function PanoramaHotspot({
+  hotspot,
+  explored,
+  onClick,
+  authorMode = false,
+  isSelected = false,
+  onAuthorDragStart,
+}) {
   const position = degreesToSpherePosition(hotspot.yaw, hotspot.pitch)
   const [isHovered, setIsHovered] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
-  const shouldShowLabel = hotspot.labelMode === 'always' || isHovered || isFocused
+  const shouldShowLabel = authorMode || hotspot.labelMode === 'always' || isHovered || isFocused
   const isComplete = hotspot.completed ?? explored
   const variantClass = hotspot.variant === 'door' ? 'is-door' : hotspot.variant === 'desk' ? 'is-desk' : ''
 
@@ -67,8 +73,16 @@ function PanoramaHotspot({ hotspot, explored, onClick }) {
       <Html transform sprite distanceFactor={10} position={[0, 0, 0]}>
         <button
           type="button"
-          className={`panorama-hotspot ${variantClass} ${isComplete ? 'is-complete' : ''}`}
+          className={`panorama-hotspot ${variantClass} ${isComplete ? 'is-complete' : ''} ${authorMode ? 'is-author' : ''} ${isSelected ? 'is-selected' : ''}`}
           onClick={onClick}
+          onPointerDown={(event) => {
+            if (!authorMode) {
+              return
+            }
+
+            event.stopPropagation()
+            onAuthorDragStart?.(hotspot.id)
+          }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onFocus={() => setIsFocused(true)}
@@ -83,6 +97,60 @@ function PanoramaHotspot({ hotspot, explored, onClick }) {
   )
 }
 
+function PanoramaInteractionLayer({
+  authorMode,
+  draggingHotspotId,
+  onAuthorCreateHotspot,
+  onAuthorMoveHotspot,
+  onAuthorDragEnd,
+}) {
+  useEffect(() => {
+    if (!authorMode || !draggingHotspotId) {
+      return undefined
+    }
+
+    const handlePointerUp = () => {
+      onAuthorDragEnd?.()
+    }
+
+    window.addEventListener('pointerup', handlePointerUp)
+    return () => window.removeEventListener('pointerup', handlePointerUp)
+  }, [authorMode, draggingHotspotId, onAuthorDragEnd])
+
+  return (
+    <mesh
+      scale={[-1, 1, 1]}
+      onPointerDown={(event) => {
+        if (!authorMode || draggingHotspotId) {
+          return
+        }
+
+        event.stopPropagation()
+        onAuthorCreateHotspot?.(spherePositionToDegrees(event.point))
+      }}
+      onPointerMove={(event) => {
+        if (!authorMode || !draggingHotspotId) {
+          return
+        }
+
+        event.stopPropagation()
+        onAuthorMoveHotspot?.(draggingHotspotId, spherePositionToDegrees(event.point))
+      }}
+      onPointerUp={(event) => {
+        if (!authorMode || !draggingHotspotId) {
+          return
+        }
+
+        event.stopPropagation()
+        onAuthorDragEnd?.()
+      }}
+    >
+      <sphereGeometry args={[9.85, 64, 64]} />
+      <meshBasicMaterial transparent opacity={0} side={THREE.BackSide} depthWrite={false} />
+    </mesh>
+  )
+}
+
 export function PanoramaViewer({
   imagePath,
   loadingText,
@@ -91,6 +159,13 @@ export function PanoramaViewer({
   exploredHotspotIds = [],
   onHotspotClick,
   showHotspots = true,
+  authorMode = false,
+  selectedHotspotId = null,
+  onAuthorCreateHotspot,
+  onAuthorMoveHotspot,
+  onAuthorDragStart,
+  onAuthorDragEnd,
+  draggingHotspotId = null,
 }) {
   const imageStatus = useImageStatus(imagePath)
 
@@ -114,6 +189,13 @@ export function PanoramaViewer({
         <ambientLight intensity={1.2} />
         <pointLight position={[0, 3, 0]} intensity={0.35} color="#fff5de" />
         <PanoramaSphere imagePath={imagePath} />
+        <PanoramaInteractionLayer
+          authorMode={authorMode}
+          draggingHotspotId={draggingHotspotId}
+          onAuthorCreateHotspot={onAuthorCreateHotspot}
+          onAuthorMoveHotspot={onAuthorMoveHotspot}
+          onAuthorDragEnd={onAuthorDragEnd}
+        />
 
         {showHotspots &&
           hotspots.map((hotspot) => (
@@ -122,6 +204,9 @@ export function PanoramaViewer({
               hotspot={hotspot}
               explored={exploredHotspotIds.includes(hotspot.id)}
               onClick={() => onHotspotClick(hotspot.id)}
+              authorMode={authorMode}
+              isSelected={selectedHotspotId === hotspot.id}
+              onAuthorDragStart={onAuthorDragStart}
             />
           ))}
 

@@ -1,4 +1,5 @@
 import { PanoramaViewer } from './PanoramaViewer'
+import { buildCaseHotspots } from '../lib/roomHotspots'
 
 const ROOM_IMAGE_BY_PATIENT = {
   1: '/assets/Psychotic-Disorder.png',
@@ -9,53 +10,35 @@ const ROOM_IMAGE_BY_PATIENT = {
   6: '/assets/General-Room.png',
 }
 
-const ROOM_HOTSPOT_COORDINATES = {
-  default: {
-    patient: { yaw: 0, pitch: -6 },
-    chart: { yaw: 105, pitch: -8 },
-    monitor: { yaw: 18, pitch: 8 },
-    sink: { yaw: 58, pitch: -5 },
-    bulletin: { yaw: -82, pitch: 6 },
-    environment: { yaw: -42, pitch: -5 },
-  },
-  1: {
-    patient: { yaw: -48, pitch: -11 },
-    chart: { yaw: -132, pitch: -9 },
-    monitor: { yaw: -148, pitch: 8 },
-    bulletin: { yaw: 145, pitch: 12 },
-  },
-  2: {
-    environment: { yaw: -36, pitch: -5 },
-  },
-  3: {
-    monitor: { yaw: 24, pitch: 9 },
-  },
-  4: {
-    bulletin: { yaw: -88, pitch: 8 },
-  },
-  5: {
-    sink: { yaw: 62, pitch: -6 },
-  },
-  6: {
-    patient: { yaw: -6, pitch: -6 },
-  },
-}
-
-function resolveHotspotCoordinates(patientNumber, anchor) {
-  return ROOM_HOTSPOT_COORDINATES[patientNumber]?.[anchor] ?? ROOM_HOTSPOT_COORDINATES.default[anchor] ?? { yaw: 0, pitch: 0 }
-}
-
-export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick, showHotspots = true }) {
+export function PatientRoomScene({
+  caseData,
+  exploredHotspots,
+  onHotspotClick,
+  showHotspots = true,
+  authorMode = false,
+  authorHotspots = [],
+  selectedHotspotId = null,
+  draggingHotspotId = null,
+  onAuthorCreateHotspot,
+  onAuthorMoveHotspot,
+  onAuthorDragStart,
+  onAuthorDragEnd,
+}) {
   const imagePath = ROOM_IMAGE_BY_PATIENT[caseData.patientNumber] ?? ROOM_IMAGE_BY_PATIENT[6]
-  const hotspots = caseData.hotspots.map((hotspot) => {
-    const coordinates = resolveHotspotCoordinates(caseData.patientNumber, hotspot.anchor)
-    return {
-      id: hotspot.id,
-      label: hotspot.label,
-      yaw: coordinates.yaw,
-      pitch: coordinates.pitch,
-    }
-  })
+  const hotspots = authorMode
+    ? authorHotspots.map((hotspot) => ({
+        id: hotspot.id,
+        label: hotspot.label || hotspot.name,
+        yaw: hotspot.yaw,
+        pitch: hotspot.pitch,
+        labelMode: 'always',
+      }))
+    : buildCaseHotspots(caseData).map((hotspot) => ({
+        id: hotspot.id,
+        label: hotspot.label,
+        yaw: hotspot.yaw,
+        pitch: hotspot.pitch,
+      }))
 
   return (
     <PanoramaViewer
@@ -66,6 +49,13 @@ export function PatientRoomScene({ caseData, exploredHotspots, onHotspotClick, s
       exploredHotspotIds={exploredHotspots}
       onHotspotClick={onHotspotClick}
       showHotspots={showHotspots}
+      authorMode={authorMode}
+      selectedHotspotId={selectedHotspotId}
+      draggingHotspotId={draggingHotspotId}
+      onAuthorCreateHotspot={onAuthorCreateHotspot}
+      onAuthorMoveHotspot={onAuthorMoveHotspot}
+      onAuthorDragStart={onAuthorDragStart}
+      onAuthorDragEnd={onAuthorDragEnd}
     />
   )
 }

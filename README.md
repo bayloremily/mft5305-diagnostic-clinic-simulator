@@ -17,6 +17,7 @@ Diagnostic Clinic Simulator is a SCORM 1.2-compatible React + Vite learning expe
 - Room checklist gating before diagnosis submission unlocks
 - Global patient-progress checklist and 2.5-hour countdown timer
 - SCORM 1.2 initialization, suspend/resume, score reporting, and local fallback mode
+- Hidden course-developer hotspot author mode with drag, delete, save, and JSON copy/export
 
 ## Project structure
 
@@ -25,6 +26,7 @@ Diagnostic Clinic Simulator is a SCORM 1.2-compatible React + Vite learning expe
 - `src/components/LobbyScene.jsx`: lobby panorama with six clickable door hotspots
 - `src/components/PatientRoomScene.jsx`: patient-room panorama wrapper with hotspot placement
 - `src/data/cases.json`: learner-facing patient case data
+- `src/data/roomHotspots.json`: room hotspot coordinate source for panorama placement
 - `src/data/answerKey.json`: instructor-only diagnosis key and scoring references
 - `src/lib/scorm.js`: lightweight SCORM 1.2 runtime wrapper
 - `public/assets/`: panorama PNGs served at `/assets/FILENAME.png`
@@ -63,6 +65,33 @@ npm run package:scorm
 ```
 
 The packaged file is written to `diagnostic-clinic-simulator-scorm12.zip`.
+
+## Hotspot Author Mode
+
+Hotspot Author Mode is hidden from learners and only appears during local development when `DEV_AUTHOR_MODE` is enabled in `src/App.jsx`.
+
+With developer access enabled:
+
+- enter any patient room
+- use the visible toolbar above the panorama
+- click an existing hotspot to select it and drag it to a new position
+- click anywhere in the panorama to create a new hotspot
+- inspect the selected hotspot name and live `yaw` / `pitch`, or delete the selected hotspot
+- click `Save Hotspots` to persist the current developer coordinates in `localStorage`
+- click `Export JSON` to open a copyable JSON panel for the current room
+
+The exported structure is room-based and matches this format:
+
+```json
+{
+  "room1": {
+    "patientInterview": {
+      "yaw": 1.24,
+      "pitch": -0.35
+    }
+  }
+}
+```
 
 ## Editing patient cases
 
