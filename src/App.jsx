@@ -5,7 +5,7 @@ import answerKey from './data/answerKey.json'
 import { LobbyScene } from './components/LobbyScene'
 import { PatientRoomScene } from './components/PatientRoomScene'
 import { createScormRuntime } from './lib/scorm'
-import { buildCaseHotspots } from './lib/roomHotspots'
+import { buildCaseHotspots, buildLobbyHotspots } from './lib/roomHotspots'
 
 const TOTAL_SECONDS = 2.5 * 60 * 60
 const DEV_DISABLE_TIMER = true
@@ -21,13 +21,14 @@ function buildRoomKey(caseItem) {
   return `room${caseItem.patientNumber}`
 }
 
-function createAuthorHotspot(id, name, label, yaw, pitch) {
+function createAuthorHotspot(id, name, label, yaw, pitch, variant = 'default') {
   return {
     id,
     name,
     label,
     yaw,
     pitch,
+    variant,
   }
 }
 
@@ -38,7 +39,14 @@ function buildInitialAuthorRoomHotspots(caseItem) {
 }
 
 function buildInitialAuthorHotspotsByRoom() {
-  return Object.fromEntries(casesData.cases.map((caseItem) => [buildRoomKey(caseItem), buildInitialAuthorRoomHotspots(caseItem)]))
+  const initialCaseStates = Object.fromEntries(casesData.cases.map((caseItem) => [caseItem.id, { completed: false }]))
+
+  return {
+    lobby: buildLobbyHotspots(casesData.cases, initialCaseStates).map((hotspot) =>
+      createAuthorHotspot(hotspot.id, hotspot.name, hotspot.label, hotspot.yaw, hotspot.pitch, hotspot.variant),
+    ),
+    ...Object.fromEntries(casesData.cases.map((caseItem) => [buildRoomKey(caseItem), buildInitialAuthorRoomHotspots(caseItem)])),
+  }
 }
 
 function loadAuthorHotspots(defaultHotspotsByRoom) {
@@ -334,16 +342,6 @@ function App() {
   const activeCase = casesData.cases.find((caseItem) => caseItem.id === simState.activeCaseId) ?? null
   const activeCaseState = activeCase ? simState.cases[activeCase.id] : null
   const selectedRoomHotspot = activeCase?.hotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? null
-  const activeRoomKey = activeCase ? buildRoomKey(activeCase) : null
-  const activeAuthorHotspots = activeCase
-    ? Array.isArray(authorHotspotsByRoom[activeRoomKey])
-      ? authorHotspotsByRoom[activeRoomKey]
-      : buildInitialAuthorRoomHotspots(activeCase)
-    : []
-  const selectedAuthorHotspot =
-    authorMode && activeCase
-      ? activeAuthorHotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? null
-      : null
 
   const completedRooms = casesData.cases.filter((caseItem) => simState.cases[caseItem.id].completed).length
   const allRoomsComplete = completedRooms === casesData.cases.length
@@ -358,6 +356,18 @@ function App() {
   const displayPhase = simulationTimedOut ? 'timeout' : simState.phase
   const timerState = timerDisabled ? 'normal' : getTimerState(remainingSeconds)
   const timerMessage = timerDisabled ? 'Timer Disabled (Development Mode)' : getTimerMessage(remainingSeconds)
+  const isLobbyAuthorScene = displayPhase === 'lobby'
+  const activeAuthorSceneKey = isLobbyAuthorScene ? 'lobby' : activeCase ? buildRoomKey(activeCase) : null
+  const activeAuthorHotspots = activeAuthorSceneKey
+    ? Array.isArray(authorHotspotsByRoom[activeAuthorSceneKey])
+      ? authorHotspotsByRoom[activeAuthorSceneKey]
+      : activeCase
+        ? buildInitialAuthorRoomHotspots(activeCase)
+        : []
+    : []
+  const selectedAuthorHotspot = authorMode
+    ? activeAuthorHotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? null
+    : null
   const scoreSummary = getScoreSummary(simState)
   const learnerPassed = allRoomsComplete && scoreSummary.score >= answerKey.passingScore
   const lessonStatus = getLessonStatus({
@@ -370,7 +380,7 @@ function App() {
     lobbyOverlay === 'instructions' ||
     (!authorMode && Boolean(selectedRoomHotspot))
   const showPanoramaHotspots = authorMode || !hasPanoramaOverlay
-  const authorExportJson = activeCase ? serializeRoomHotspots(activeRoomKey, activeAuthorHotspots) : ''
+  const authorExportJson = activeAuthorSceneKey ? serializeRoomHotspots(activeAuthorSceneKey, activeAuthorHotspots) : ''
 
   useEffect(() => {
     return () => {
@@ -520,21 +530,19 @@ function App() {
     }))
   }
 
-  function updateAuthorRoom(caseItem, updater) {
-    const roomKey = buildRoomKey(caseItem)
-
+  function updateAuthorScene(sceneKey, fallbackHotspots, updater) {
     setAuthorHotspotsByRoom((currentState) => {
-      const currentHotspots = currentState[roomKey] ?? buildInitialAuthorRoomHotspots(caseItem)
+      const currentHotspots = currentState[sceneKey] ?? fallbackHotspots
       return {
         ...currentState,
-        [roomKey]: updater(currentHotspots),
+        [sceneKey]: updater(currentHotspots),
       }
     })
   }
 
   function enterAuthorMode() {
-    if (activeCase) {
-      updateAuthorRoom(activeCase, (hotspots) => hotspots)
+    if (activeAuthorSceneKey) {
+      updateAuthorScene(activeAuthorSceneKey, activeAuthorHotspots, (hotspots) => hotspots)
     }
 
     setAuthorMode(true)
@@ -550,25 +558,32 @@ function App() {
   }
 
   function createRoomAuthorHotspot({ yaw, pitch }) {
-    if (!activeCase) {
+    if (!activeAuthorSceneKey) {
       return
     }
 
     const nextIndex = activeAuthorHotspots.length + 1
     const nextId = `author-hotspot-${authorHotspotCounterRef.current}`
     authorHotspotCounterRef.current += 1
-    const nextHotspot = createAuthorHotspot(nextId, `hotspot${nextIndex}`, `Hotspot ${nextIndex}`, yaw, pitch)
+    const nextHotspot = createAuthorHotspot(
+      nextId,
+      `hotspot${nextIndex}`,
+      `Hotspot ${nextIndex}`,
+      yaw,
+      pitch,
+      isLobbyAuthorScene ? 'door' : 'default',
+    )
 
     setSelectedHotspotId(nextId)
-    updateAuthorRoom(activeCase, (hotspots) => [...hotspots, nextHotspot])
+    updateAuthorScene(activeAuthorSceneKey, activeAuthorHotspots, (hotspots) => [...hotspots, nextHotspot])
   }
 
   function moveRoomAuthorHotspot(hotspotId, coordinates) {
-    if (!activeCase) {
+    if (!activeAuthorSceneKey) {
       return
     }
 
-    updateAuthorRoom(activeCase, (hotspots) =>
+    updateAuthorScene(activeAuthorSceneKey, activeAuthorHotspots, (hotspots) =>
       hotspots.map((hotspot) =>
         hotspot.id === hotspotId
           ? {
@@ -582,16 +597,18 @@ function App() {
   }
 
   function deleteRoomAuthorHotspot(hotspotId) {
-    if (!activeCase) {
+    if (!activeAuthorSceneKey) {
       return
     }
 
-    updateAuthorRoom(activeCase, (hotspots) => hotspots.filter((hotspot) => hotspot.id !== hotspotId))
+    updateAuthorScene(activeAuthorSceneKey, activeAuthorHotspots, (hotspots) =>
+      hotspots.filter((hotspot) => hotspot.id !== hotspotId),
+    )
     setSelectedHotspotId((currentValue) => (currentValue === hotspotId ? null : currentValue))
   }
 
   function handleAuthorSave() {
-    if (!developerToolsEnabled || !activeCase) {
+    if (!developerToolsEnabled || !activeAuthorSceneKey) {
       return
     }
 
@@ -606,7 +623,7 @@ function App() {
   }
 
   function handleAuthorExportJson() {
-    if (!activeCase) {
+    if (!activeAuthorSceneKey) {
       return
     }
     setAuthorJsonPanelOpen(true)
@@ -622,6 +639,11 @@ function App() {
   }
 
   function handleLobbyHotspotOpen(hotspotId) {
+    if (authorMode) {
+      setSelectedHotspotId(hotspotId)
+      return
+    }
+
     if (hotspotId === 'instructions') {
       setLobbyOverlay('instructions')
       return
@@ -816,7 +838,7 @@ function App() {
 
       <section className="workspace">
         <section className="experience-panel is-full-width">
-          {developerToolsEnabled && displayPhase === 'room' && activeCase && (
+          {developerToolsEnabled && (displayPhase === 'room' && activeCase || displayPhase === 'lobby') && (
             <section className="author-toolbar-panel">
               <div className="author-toolbar">
                 <button type="button" className="ghost" onClick={enterAuthorMode} disabled={authorMode}>
@@ -885,6 +907,14 @@ function App() {
                 caseStates={simState.cases}
                 onHotspotClick={handleLobbyHotspotOpen}
                 showHotspots={showPanoramaHotspots}
+                authorMode={authorMode}
+                authorHotspots={activeAuthorHotspots}
+                selectedHotspotId={selectedHotspotId}
+                draggingHotspotId={draggingAuthorHotspotId}
+                onAuthorCreateHotspot={createRoomAuthorHotspot}
+                onAuthorMoveHotspot={moveRoomAuthorHotspot}
+                onAuthorDragStart={setDraggingAuthorHotspotId}
+                onAuthorDragEnd={() => setDraggingAuthorHotspotId(null)}
               />
             )}
 
@@ -991,14 +1021,18 @@ function App() {
               </>
             )}
 
-            {developerToolsEnabled && authorMode && authorJsonPanelOpen && activeCase && (
+            {developerToolsEnabled && authorMode && authorJsonPanelOpen && activeAuthorSceneKey && (
               <>
                 <div className="panorama-overlay-backdrop" />
                 <section className="panorama-overlay is-docked">
                   <div className="panorama-overlay-header">
                     <div>
                       <p className="eyebrow">Developer JSON</p>
-                      <h2>{`Room ${activeCase.patientNumber} Hotspot Coordinates`}</h2>
+                      <h2>
+                        {activeCase
+                          ? `Room ${activeCase.patientNumber} Hotspot Coordinates`
+                          : 'Lobby Hotspot Coordinates'}
+                      </h2>
                     </div>
                     <button type="button" className="ghost" onClick={() => setAuthorJsonPanelOpen(false)}>
                       Close

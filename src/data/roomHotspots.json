@@ -1,4 +1,13 @@
 {
+  "lobby": {
+    "patient-1": { "yaw": 68, "pitch": -4 },
+    "patient-2": { "yaw": 80, "pitch": -5 },
+    "patient-3": { "yaw": 92, "pitch": -5 },
+    "patient-4": { "yaw": 108, "pitch": -4 },
+    "patient-5": { "yaw": 122, "pitch": -4 },
+    "patient-6": { "yaw": 138, "pitch": -3 },
+    "instructions": { "yaw": 0, "pitch": 10 }
+  },
   "room1": {
     "patient-interview": { "yaw": -48, "pitch": -11 },
     "intake-chart": { "yaw": -132, "pitch": -9 },

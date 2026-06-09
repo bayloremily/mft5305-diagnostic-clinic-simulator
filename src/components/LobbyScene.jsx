@@ -1,35 +1,32 @@
 import { PanoramaViewer } from './PanoramaViewer'
+import { buildLobbyHotspots } from '../lib/roomHotspots'
 
 const LOBBY_IMAGE_PATH = '/assets/Lobby.png'
 
-const LOBBY_DOOR_HOTSPOTS = [
-  { id: 'patient-1', yaw: 68, pitch: -4 },
-  { id: 'patient-2', yaw: 80, pitch: -5 },
-  { id: 'patient-3', yaw: 92, pitch: -5 },
-  { id: 'patient-4', yaw: 108, pitch: -4 },
-  { id: 'patient-5', yaw: 122, pitch: -4 },
-  { id: 'patient-6', yaw: 138, pitch: -3 },
-]
-
-export function LobbyScene({ cases, caseStates, onHotspotClick, showHotspots = true }) {
-  const hotspots = cases.map((caseItem, index) => ({
-    id: caseItem.id,
-    label: `Patient ${caseItem.patientNumber}`,
-    yaw: LOBBY_DOOR_HOTSPOTS[index]?.yaw ?? 0,
-    pitch: LOBBY_DOOR_HOTSPOTS[index]?.pitch ?? -4,
-    variant: 'door',
-    labelMode: 'hover',
-    completed: caseStates[caseItem.id].completed,
-  }))
-
-  hotspots.push({
-    id: 'instructions',
-    label: 'Instructions',
-    yaw: 0,
-    pitch: 10,
-    variant: 'desk',
-    labelMode: 'hover',
-  })
+export function LobbyScene({
+  cases,
+  caseStates,
+  onHotspotClick,
+  showHotspots = true,
+  authorMode = false,
+  authorHotspots = [],
+  selectedHotspotId = null,
+  draggingHotspotId = null,
+  onAuthorCreateHotspot,
+  onAuthorMoveHotspot,
+  onAuthorDragStart,
+  onAuthorDragEnd,
+}) {
+  const hotspots = authorMode
+    ? authorHotspots.map((hotspot) => ({
+        id: hotspot.id,
+        label: hotspot.label || hotspot.name,
+        yaw: hotspot.yaw,
+        pitch: hotspot.pitch,
+        variant: hotspot.variant,
+        labelMode: 'always',
+      }))
+    : buildLobbyHotspots(cases, caseStates)
 
   const exploredHotspotIds = cases.filter((caseItem) => caseStates[caseItem.id].completed).map((caseItem) => caseItem.id)
 
@@ -42,6 +39,13 @@ export function LobbyScene({ cases, caseStates, onHotspotClick, showHotspots = t
       exploredHotspotIds={exploredHotspotIds}
       onHotspotClick={onHotspotClick}
       showHotspots={showHotspots}
+      authorMode={authorMode}
+      selectedHotspotId={selectedHotspotId}
+      draggingHotspotId={draggingHotspotId}
+      onAuthorCreateHotspot={onAuthorCreateHotspot}
+      onAuthorMoveHotspot={onAuthorMoveHotspot}
+      onAuthorDragStart={onAuthorDragStart}
+      onAuthorDragEnd={onAuthorDragEnd}
     />
   )
 }
