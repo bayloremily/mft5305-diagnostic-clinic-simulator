@@ -8,8 +8,8 @@ import { createScormRuntime } from './lib/scorm'
 import { buildCaseHotspots, buildLobbyHotspots } from './lib/roomHotspots'
 
 const TOTAL_SECONDS = 2.5 * 60 * 60
-const DEV_DISABLE_TIMER = true
-const DEV_AUTHOR_MODE = true
+const DEV_DISABLE_TIMER = false
+const DEV_AUTHOR_MODE = false
 const STORAGE_KEY = 'diagnostic-clinic-simulator-state'
 const AUTHOR_STORAGE_KEY = 'diagnostic-clinic-simulator-author-hotspots'
 
