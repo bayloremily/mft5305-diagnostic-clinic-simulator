@@ -9,12 +9,12 @@
     "instructions": { "yaw": -113.58, "pitch": -2.71 }
   },
   "room1": {
-    "patient-interview": { "yaw": -48, "pitch": -11 },
-    "intake-chart": { "yaw": -132, "pitch": -9 },
-    "observation-notes": { "yaw": -148, "pitch": 8 },
+    "patient-interview": { "yaw": 159.89, "pitch": -2.67 },
+    "intake-chart": { "yaw": 135.14, "pitch": -2.41 },
+    "observation-notes": { "yaw": 129.86, "pitch": 16.1 },
     "medication-history": { "yaw": 58, "pitch": -5 },
-    "collateral-note": { "yaw": 145, "pitch": 12 },
-    "environmental-observation": { "yaw": -42, "pitch": -5 }
+    "collateral-note": { "yaw": 175.65, "pitch": -0.56 },
+    "environmental-observation": { "yaw": -38.67, "pitch": 17.28 }
   },
   "room2": {
     "patient-interview": { "yaw": 46.51, "pitch": -18.59 },
