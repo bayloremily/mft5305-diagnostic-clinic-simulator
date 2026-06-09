@@ -8,12 +8,12 @@
     "environmental-observation": { "yaw": -42, "pitch": -5 }
   },
   "room2": {
-    "patient-interview": { "yaw": 0, "pitch": -6 },
-    "intake-chart": { "yaw": 105, "pitch": -8 },
-    "observation-notes": { "yaw": 18, "pitch": 8 },
+    "patient-interview": { "yaw": 46.51, "pitch": -18.59 },
+    "intake-chart": { "yaw": 65.1, "pitch": 20.96 },
+    "observation-notes": { "yaw": 48.36, "pitch": 8.12 },
     "medication-history": { "yaw": 58, "pitch": -5 },
     "collateral-note": { "yaw": -82, "pitch": 6 },
-    "environmental-observation": { "yaw": -36, "pitch": -5 }
+    "environmental-observation": { "yaw": -36.04, "pitch": 10.74 }
   },
   "room3": {
     "patient-interview": { "yaw": 0, "pitch": -6 },
