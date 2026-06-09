@@ -1,12 +1,12 @@
 {
   "lobby": {
-    "patient-1": { "yaw": 68, "pitch": -4 },
-    "patient-2": { "yaw": 80, "pitch": -5 },
-    "patient-3": { "yaw": 92, "pitch": -5 },
-    "patient-4": { "yaw": 108, "pitch": -4 },
-    "patient-5": { "yaw": 122, "pitch": -4 },
-    "patient-6": { "yaw": 138, "pitch": -3 },
-    "instructions": { "yaw": 0, "pitch": 10 }
+    "patient-1": { "yaw": -20.04, "pitch": 3.32 },
+    "patient-2": { "yaw": -10.59, "pitch": 2.9 },
+    "patient-3": { "yaw": 19.35, "pitch": 1.54 },
+    "patient-4": { "yaw": -178.41, "pitch": 2.4 },
+    "patient-5": { "yaw": -170.49, "pitch": 0.53 },
+    "patient-6": { "yaw": -67.85, "pitch": 4.95 },
+    "instructions": { "yaw": -113.58, "pitch": -2.71 }
   },
   "room1": {
     "patient-interview": { "yaw": -48, "pitch": -11 },
