@@ -5,9 +5,104 @@ import answerKey from './data/answerKey.json'
 import { LobbyScene } from './components/LobbyScene'
 import { PatientRoomScene } from './components/PatientRoomScene'
 import { createScormRuntime } from './lib/scorm'
+import { buildCaseHotspots } from './lib/roomHotspots'
 
 const TOTAL_SECONDS = 2.5 * 60 * 60
+const DEV_DISABLE_TIMER = true
 const STORAGE_KEY = 'diagnostic-clinic-simulator-state'
+const AUTHOR_STORAGE_KEY = 'diagnostic-clinic-simulator-author-hotspots'
+const AUTHOR_ACCESS_KEY = 'diagnostic-clinic-simulator-author-access'
+
+function getDeveloperToolsEnabled() {
+  const params = new URLSearchParams(window.location.search)
+
+  if (params.get('author') === '1') {
+    window.localStorage.setItem(AUTHOR_ACCESS_KEY, '1')
+    return true
+  }
+
+  return window.localStorage.getItem(AUTHOR_ACCESS_KEY) === '1'
+}
+
+function loadAuthorHotspots() {
+  try {
+    const savedValue = window.localStorage.getItem(AUTHOR_STORAGE_KEY)
+    if (!savedValue) {
+      return {}
+    }
+
+    const parsed = JSON.parse(savedValue)
+    return parsed && typeof parsed === 'object' ? parsed : {}
+  } catch {
+    return {}
+  }
+}
+
+function buildRoomKey(caseItem) {
+  return `room${caseItem.patientNumber}`
+}
+
+function normalizeHotspotName(name, fallback) {
+  const compactName = String(name ?? '')
+    .trim()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase())
+    .replace(/[^a-zA-Z0-9]/g, '')
+
+  return compactName || fallback
+}
+
+function serializeAuthorHotspots(authorHotspotsByRoom) {
+  const entries = Object.entries(authorHotspotsByRoom).map(([roomKey, hotspots]) => {
+    const roomHotspots = Array.isArray(hotspots) ? hotspots : []
+    const serializedHotspots = roomHotspots.reduce((accumulator, hotspot, index) => {
+      const fallbackName = `hotspot${index + 1}`
+      const exportName = normalizeHotspotName(hotspot.name, fallbackName)
+      let finalName = exportName
+      let suffix = 2
+
+      while (accumulator[finalName]) {
+        finalName = `${exportName}${suffix}`
+        suffix += 1
+      }
+
+      accumulator[finalName] = {
+        yaw: Number(Number(hotspot.yaw).toFixed(2)),
+        pitch: Number(Number(hotspot.pitch).toFixed(2)),
+      }
+
+      return accumulator
+    }, {})
+
+    return [roomKey, serializedHotspots]
+  })
+
+  return JSON.stringify(Object.fromEntries(entries), null, 2)
+}
+
+function createAuthorHotspot(id, name, label, yaw, pitch) {
+  return {
+    id,
+    name,
+    label,
+    yaw,
+    pitch,
+  }
+}
+
+function buildInitialAuthorRoomHotspots(caseItem) {
+  return buildCaseHotspots(caseItem).map((hotspot) =>
+    createAuthorHotspot(hotspot.id, hotspot.name, hotspot.label, hotspot.yaw, hotspot.pitch),
+  )
+}
+
+function getInitialAuthorHotspotCounter(authorHotspotsByRoom) {
+  const hotspotCount = Object.values(authorHotspotsByRoom).reduce(
+    (count, hotspots) => count + (Array.isArray(hotspots) ? hotspots.length : 0),
+    0,
+  )
+
+  return hotspotCount + 1
+}
 
 function createEmptyCaseState(caseId) {
   return {
@@ -236,20 +331,41 @@ function App() {
   const [clockNow, setClockNow] = useState(() => Date.now())
   const [selectedHotspotId, setSelectedHotspotId] = useState(null)
   const [lobbyOverlay, setLobbyOverlay] = useState(null)
+  const [developerToolsEnabled] = useState(() => getDeveloperToolsEnabled())
+  const [authorMode, setAuthorMode] = useState(false)
+  const [authorHotspotsByRoom, setAuthorHotspotsByRoom] = useState(() => loadAuthorHotspots())
+  const [draggingAuthorHotspotId, setDraggingAuthorHotspotId] = useState(null)
+  const [authorJsonCopied, setAuthorJsonCopied] = useState(false)
+  const [authorSavedAt, setAuthorSavedAt] = useState(null)
+  const authorHotspotCounterRef = useRef(getInitialAuthorHotspotCounter(authorHotspotsByRoom))
 
   const activeCase = casesData.cases.find((caseItem) => caseItem.id === simState.activeCaseId) ?? null
   const activeCaseState = activeCase ? simState.cases[activeCase.id] : null
   const selectedRoomHotspot = activeCase?.hotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? null
+  const activeRoomKey = activeCase ? buildRoomKey(activeCase) : null
+  const activeAuthorHotspots = activeCase
+    ? Array.isArray(authorHotspotsByRoom[activeRoomKey])
+      ? authorHotspotsByRoom[activeRoomKey]
+      : buildInitialAuthorRoomHotspots(activeCase)
+    : []
+  const selectedAuthorHotspot =
+    authorMode && activeCase
+      ? activeAuthorHotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? null
+      : null
 
   const completedRooms = casesData.cases.filter((caseItem) => simState.cases[caseItem.id].completed).length
   const allRoomsComplete = completedRooms === casesData.cases.length
+  const timerDisabled = DEV_DISABLE_TIMER
   const remainingSeconds = simState.timerEndsAt
     ? Math.max(0, Math.floor((simState.timerEndsAt - clockNow) / 1000))
     : TOTAL_SECONDS
-  const simulationTimedOut = Boolean(simState.launched && simState.timerEndsAt && remainingSeconds === 0 && !allRoomsComplete)
+  const timerExpired = !timerDisabled && remainingSeconds === 0
+  const simulationTimedOut = Boolean(
+    !timerDisabled && simState.launched && simState.timerEndsAt && timerExpired && !allRoomsComplete,
+  )
   const displayPhase = simulationTimedOut ? 'timeout' : simState.phase
-  const timerState = getTimerState(remainingSeconds)
-  const timerMessage = getTimerMessage(remainingSeconds)
+  const timerState = timerDisabled ? 'normal' : getTimerState(remainingSeconds)
+  const timerMessage = timerDisabled ? 'Timer Disabled (Development Mode)' : getTimerMessage(remainingSeconds)
   const scoreSummary = getScoreSummary(simState)
   const learnerPassed = allRoomsComplete && scoreSummary.score >= answerKey.passingScore
   const lessonStatus = getLessonStatus({
@@ -260,8 +376,9 @@ function App() {
   const hasPanoramaOverlay =
     displayPhase === 'synopsis' ||
     lobbyOverlay === 'instructions' ||
-    Boolean(selectedRoomHotspot)
-  const showPanoramaHotspots = !hasPanoramaOverlay
+    (!authorMode && Boolean(selectedRoomHotspot))
+  const showPanoramaHotspots = authorMode || !hasPanoramaOverlay
+  const authorExportJson = serializeAuthorHotspots(authorHotspotsByRoom)
 
   useEffect(() => {
     return () => {
@@ -270,7 +387,7 @@ function App() {
   }, [startup.scorm])
 
   useEffect(() => {
-    if (!simState.timerEndsAt) {
+    if (timerDisabled || !simState.timerEndsAt) {
       return undefined
     }
 
@@ -281,11 +398,28 @@ function App() {
     updateRemainingTime()
     const intervalId = window.setInterval(updateRemainingTime, 1000)
     return () => window.clearInterval(intervalId)
-  }, [simState.timerEndsAt])
+  }, [simState.timerEndsAt, timerDisabled])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(simState))
   }, [simState])
+
+  useEffect(() => {
+    if (!developerToolsEnabled) {
+      return
+    }
+
+    window.localStorage.setItem(AUTHOR_STORAGE_KEY, JSON.stringify(authorHotspotsByRoom))
+  }, [authorHotspotsByRoom, developerToolsEnabled])
+
+  useEffect(() => {
+    if (!authorJsonCopied) {
+      return undefined
+    }
+
+    const timeoutId = window.setTimeout(() => setAuthorJsonCopied(false), 1800)
+    return () => window.clearTimeout(timeoutId)
+  }, [authorJsonCopied])
 
   useEffect(() => {
     const scorm = scormRef.current
@@ -338,12 +472,12 @@ function App() {
       ...currentState,
       launched: true,
       phase: 'lobby',
-      timerEndsAt: currentState.timerEndsAt ?? Date.now() + TOTAL_SECONDS * 1000,
+      timerEndsAt: timerDisabled ? currentState.timerEndsAt : currentState.timerEndsAt ?? Date.now() + TOTAL_SECONDS * 1000,
     }))
   }
 
   function openSynopsis(caseId) {
-    if (remainingSeconds === 0) {
+    if (timerExpired) {
       return
     }
 
@@ -353,7 +487,7 @@ function App() {
       launched: true,
       activeCaseId: caseId,
       phase: 'synopsis',
-      timerEndsAt: currentState.timerEndsAt ?? Date.now() + TOTAL_SECONDS * 1000,
+      timerEndsAt: timerDisabled ? currentState.timerEndsAt : currentState.timerEndsAt ?? Date.now() + TOTAL_SECONDS * 1000,
       cases: {
         ...currentState.cases,
         [caseId]: {
@@ -375,6 +509,7 @@ function App() {
   function returnToLobby() {
     setSelectedHotspotId(null)
     setLobbyOverlay(null)
+    setDraggingAuthorHotspotId(null)
     setSimState((currentState) => ({
       ...currentState,
       activeCaseId: null,
@@ -383,6 +518,11 @@ function App() {
   }
 
   function handleHotspotOpen(hotspotId) {
+    if (authorMode) {
+      setSelectedHotspotId(hotspotId)
+      return
+    }
+
     if (!activeCase) {
       return
     }
@@ -394,6 +534,108 @@ function App() {
         ? caseState.exploredHotspots
         : [...caseState.exploredHotspots, hotspotId],
     }))
+  }
+
+  function updateAuthorRoom(caseItem, updater) {
+    const roomKey = buildRoomKey(caseItem)
+
+    setAuthorHotspotsByRoom((currentState) => {
+      const currentHotspots = currentState[roomKey] ?? buildInitialAuthorRoomHotspots(caseItem)
+      return {
+        ...currentState,
+        [roomKey]: updater(currentHotspots),
+      }
+    })
+  }
+
+  function toggleAuthorMode() {
+    const nextValue = !authorMode
+
+    if (!nextValue) {
+      setSelectedHotspotId(null)
+      setDraggingAuthorHotspotId(null)
+    } else if (activeCase) {
+      updateAuthorRoom(activeCase, (hotspots) => hotspots)
+    }
+
+    setAuthorMode(nextValue)
+  }
+
+  function createRoomAuthorHotspot({ yaw, pitch }) {
+    if (!activeCase) {
+      return
+    }
+
+    const nextIndex = activeAuthorHotspots.length + 1
+    const nextId = `author-hotspot-${authorHotspotCounterRef.current}`
+    authorHotspotCounterRef.current += 1
+    const nextHotspot = createAuthorHotspot(nextId, `hotspot${nextIndex}`, `Hotspot ${nextIndex}`, yaw, pitch)
+
+    setSelectedHotspotId(nextId)
+    updateAuthorRoom(activeCase, (hotspots) => [...hotspots, nextHotspot])
+  }
+
+  function moveRoomAuthorHotspot(hotspotId, coordinates) {
+    if (!activeCase) {
+      return
+    }
+
+    updateAuthorRoom(activeCase, (hotspots) =>
+      hotspots.map((hotspot) =>
+        hotspot.id === hotspotId
+          ? {
+              ...hotspot,
+              yaw: coordinates.yaw,
+              pitch: coordinates.pitch,
+            }
+          : hotspot,
+      ),
+    )
+  }
+
+  function renameRoomAuthorHotspot(hotspotId, name) {
+    if (!activeCase) {
+      return
+    }
+
+    updateAuthorRoom(activeCase, (hotspots) =>
+      hotspots.map((hotspot) =>
+        hotspot.id === hotspotId
+          ? {
+              ...hotspot,
+              name,
+              label: name || hotspot.label,
+            }
+          : hotspot,
+      ),
+    )
+  }
+
+  function deleteRoomAuthorHotspot(hotspotId) {
+    if (!activeCase) {
+      return
+    }
+
+    updateAuthorRoom(activeCase, (hotspots) => hotspots.filter((hotspot) => hotspot.id !== hotspotId))
+    setSelectedHotspotId((currentValue) => (currentValue === hotspotId ? null : currentValue))
+  }
+
+  function handleAuthorSave() {
+    if (!developerToolsEnabled) {
+      return
+    }
+
+    window.localStorage.setItem(AUTHOR_STORAGE_KEY, JSON.stringify(authorHotspotsByRoom))
+    setAuthorSavedAt(Date.now())
+  }
+
+  async function handleAuthorCopyJson() {
+    try {
+      await navigator.clipboard.writeText(authorExportJson)
+      setAuthorJsonCopied(true)
+    } catch {
+      setAuthorJsonCopied(false)
+    }
   }
 
   function handleLobbyHotspotOpen(hotspotId) {
@@ -440,7 +682,7 @@ function App() {
 
   function handleDiagnosisSubmit(event) {
     event.preventDefault()
-    if (!activeCase || !activeCaseState || remainingSeconds === 0) {
+    if (!activeCase || !activeCaseState || timerExpired) {
       return
     }
 
@@ -576,7 +818,7 @@ function App() {
         <div className="status-cluster learner-status-cluster">
           <div className={`timer-card ${timerState}`}>
             <span>Time Remaining</span>
-            <strong>{formatRemainingTime(remainingSeconds)}</strong>
+            <strong>{timerDisabled ? 'Timer Disabled' : formatRemainingTime(remainingSeconds)}</strong>
             <small>{timerMessage}</small>
           </div>
           <div className="mini-card">
@@ -598,6 +840,14 @@ function App() {
                 exploredHotspots={activeCaseState.exploredHotspots}
                 onHotspotClick={handleHotspotOpen}
                 showHotspots={showPanoramaHotspots}
+                authorMode={authorMode}
+                authorHotspots={activeAuthorHotspots}
+                selectedHotspotId={selectedHotspotId}
+                draggingHotspotId={draggingAuthorHotspotId}
+                onAuthorCreateHotspot={createRoomAuthorHotspot}
+                onAuthorMoveHotspot={moveRoomAuthorHotspot}
+                onAuthorDragStart={setDraggingAuthorHotspotId}
+                onAuthorDragEnd={() => setDraggingAuthorHotspotId(null)}
               />
             ) : (
               <LobbyScene
@@ -689,7 +939,7 @@ function App() {
               </>
             )}
 
-            {displayPhase === 'room' && activeCase && activeCaseState && selectedRoomHotspot && (
+            {displayPhase === 'room' && activeCase && activeCaseState && selectedRoomHotspot && !authorMode && (
               <>
                 <div className="panorama-overlay-backdrop" />
                 <section className="panorama-overlay is-docked">
@@ -741,6 +991,93 @@ function App() {
               </div>
 
               <div className="room-sidebar">
+                {developerToolsEnabled && (
+                  <section className={`panel author-panel ${authorMode ? 'is-on' : ''}`}>
+                    <div className="author-panel-header">
+                      <div>
+                        <p className="eyebrow">Developer Tools</p>
+                        <h2>Hotspot Author Mode</h2>
+                      </div>
+                      <button type="button" className="ghost" onClick={toggleAuthorMode}>
+                        Author Mode {authorMode ? 'ON' : 'OFF'}
+                      </button>
+                    </div>
+
+                    <p className="panel-copy">
+                      This authoring surface is hidden unless the simulator is opened with developer access. Turn it on
+                      to click the panorama, create hotspots, drag them into place, and export room coordinates.
+                    </p>
+
+                    {authorMode && (
+                      <>
+                        <div className="author-actions">
+                          <button type="button" onClick={handleAuthorSave}>
+                            Save
+                          </button>
+                          <button type="button" className="ghost" onClick={handleAuthorCopyJson}>
+                            Copy JSON
+                          </button>
+                        </div>
+
+                        <p className="author-status">
+                          {authorJsonCopied
+                            ? 'Copied hotspot JSON.'
+                            : authorSavedAt
+                              ? `Saved to local developer storage at ${new Date(authorSavedAt).toLocaleTimeString()}.`
+                              : 'Click anywhere in the panorama to create a hotspot.'}
+                        </p>
+
+                        <ul className="author-hotspot-list">
+                          {activeAuthorHotspots.map((hotspot) => (
+                            <li key={hotspot.id} className={selectedAuthorHotspot?.id === hotspot.id ? 'is-selected' : ''}>
+                              <button
+                                type="button"
+                                className="ghost author-hotspot-select"
+                                onClick={() => setSelectedHotspotId(hotspot.id)}
+                              >
+                                <span>{hotspot.label || hotspot.name}</span>
+                                <small>
+                                  yaw {hotspot.yaw.toFixed(2)} | pitch {hotspot.pitch.toFixed(2)}
+                                </small>
+                              </button>
+                              <label>
+                                <span>Hotspot name</span>
+                                <input
+                                  type="text"
+                                  value={hotspot.name}
+                                  onChange={(event) => renameRoomAuthorHotspot(hotspot.id, event.target.value)}
+                                />
+                              </label>
+                              <div className="author-coordinate-grid">
+                                <label>
+                                  <span>yaw</span>
+                                  <input type="text" value={hotspot.yaw.toFixed(2)} readOnly />
+                                </label>
+                                <label>
+                                  <span>pitch</span>
+                                  <input type="text" value={hotspot.pitch.toFixed(2)} readOnly />
+                                </label>
+                              </div>
+                              <button
+                                type="button"
+                                className="ghost author-delete-button"
+                                onClick={() => deleteRoomAuthorHotspot(hotspot.id)}
+                              >
+                                Delete hotspot
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <label className="author-json-block">
+                          <span>Export JSON</span>
+                          <textarea value={authorExportJson} readOnly />
+                        </label>
+                      </>
+                    )}
+                  </section>
+                )}
+
                 <form className="panel diagnosis-card" onSubmit={handleDiagnosisSubmit}>
                   <h2>Diagnosis Submission</h2>
                   <label>
@@ -748,7 +1085,7 @@ function App() {
                     <select
                       value={activeCaseState.diagnosis}
                       onChange={(event) => handleDiagnosisChange(event.target.value)}
-                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
+                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || timerExpired}
                     >
                       <option value="">Select a diagnosis</option>
                       {activeCase.diagnosisOptions.map((option) => (
@@ -765,7 +1102,7 @@ function App() {
                       rows={5}
                       value={activeCaseState.rationale}
                       onChange={(event) => handleRationaleChange(event.target.value)}
-                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
+                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || timerExpired}
                     />
                   </label>
 
@@ -775,7 +1112,7 @@ function App() {
                       rows={4}
                       value={activeCaseState.ruleOuts}
                       onChange={(event) => handleRuleOutsChange(event.target.value)}
-                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || remainingSeconds === 0}
+                      disabled={!getCaseProgress(activeCase, activeCaseState).roomReadyToSubmit || timerExpired}
                     />
                   </label>
 
@@ -786,7 +1123,7 @@ function App() {
                       !activeCaseState.diagnosis ||
                       !activeCaseState.rationale.trim() ||
                       !activeCaseState.ruleOuts.trim() ||
-                      remainingSeconds === 0
+                      timerExpired
                     }
                   >
                     Submit Patient Assessment
