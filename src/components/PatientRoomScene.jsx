@@ -2,12 +2,12 @@ import { PanoramaViewer } from './PanoramaViewer'
 import { buildCaseHotspots } from '../lib/roomHotspots'
 
 const ROOM_IMAGE_BY_PATIENT = {
-  1: '/assets/Psychotic-Disorder.png',
-  2: '/assets/Personality-Disorder.png',
-  3: '/assets/Mood-Disorder.png',
-  4: '/assets/Neurodevelopment.png',
-  5: '/assets/Neurocognitive.png',
-  6: '/assets/General-Room.png',
+  1: '/assets/Patient-1.png',
+  2: '/assets/Patient-2.png',
+  3: '/assets/Patient-3.png',
+  4: '/assets/Patient-4.png',
+  5: '/assets/Patient-5.png',
+  6: '/assets/Patient-6.png',
 }
 
 export function PatientRoomScene({
