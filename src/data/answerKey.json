@@ -3,87 +3,33 @@
   "cases": [
     {
       "id": "patient-1",
-      "correctDiagnosis": "Panic Disorder",
-      "supportingFeatures": [
-        "Unexpected panic episodes with rapid physical escalation",
-        "Persistent worry about future attacks",
-        "Avoidance and safety behaviors tied to fear of recurrence"
-      ],
-      "ruleOuts": [
-        "Generalized Anxiety Disorder because the fear is attack-focused rather than diffuse across domains",
-        "Social Anxiety Disorder because episodes are not limited to evaluation situations",
-        "Adjustment Disorder with Anxiety because the symptom pattern shows panic-specific recurrence and avoidance"
-      ]
+      "correctDiagnosis": "Intellectual Developmental Disorder, Moderate Severity",
+      "diagnosisCode": "F71"
     },
     {
       "id": "patient-2",
-      "correctDiagnosis": "Generalized Anxiety Disorder",
-      "supportingFeatures": [
-        "Excessive worry across multiple domains",
-        "Difficulty controlling the worry",
-        "Associated restlessness, sleep disturbance, fatigue, and muscle tension"
-      ],
-      "ruleOuts": [
-        "Obsessive-Compulsive Disorder because the presentation lacks intrusive obsessions with compulsive neutralizing rituals",
-        "Panic Disorder because there are no recurrent unexpected panic attacks as the core feature",
-        "Persistent Depressive Disorder because worry and physiological tension are more central than chronic low mood"
-      ]
+      "correctDiagnosis": "Developmental Coordination Disorder",
+      "diagnosisCode": "F82"
     },
     {
       "id": "patient-3",
-      "correctDiagnosis": "Social Anxiety Disorder",
-      "supportingFeatures": [
-        "Fear of negative evaluation",
-        "Avoidance of presentations, meetings, and eating in public",
-        "Functional impairment in academic and work roles"
-      ],
-      "ruleOuts": [
-        "Avoidant Personality Disorder because the available data centers on circumscribed anxiety symptoms rather than a pervasive lifelong personality pattern",
-        "Panic Disorder because the anxiety is linked to social scrutiny contexts",
-        "Autism Spectrum Disorder because the concern is embarrassment and evaluation, not a primary social communication difference"
-      ]
+      "correctDiagnosis": "Schizoaffective Disorder, Depressive Type",
+      "diagnosisCode": "F25.1"
     },
     {
       "id": "patient-4",
-      "correctDiagnosis": "Posttraumatic Stress Disorder",
-      "supportingFeatures": [
-        "Direct trauma exposure",
-        "Re-experiencing, hyperarousal, and nightmares",
-        "Avoidance and emotional numbing persisting for months"
-      ],
-      "ruleOuts": [
-        "Acute Stress Disorder because the symptoms have persisted well beyond the acute post-trauma window",
-        "Adjustment Disorder because the full trauma-related symptom cluster is present",
-        "Panic Disorder because the distress is trauma-cued rather than unexpected recurring panic"
-      ]
+      "correctDiagnosis": "Generalized Anxiety Disorder",
+      "diagnosisCode": "F41.1"
     },
     {
       "id": "patient-5",
-      "correctDiagnosis": "Obsessive-Compulsive Disorder",
-      "supportingFeatures": [
-        "Intrusive contamination fears",
-        "Compulsive washing and checking for temporary relief",
-        "Time-consuming rituals causing functional impairment"
-      ],
-      "ruleOuts": [
-        "Illness Anxiety Disorder because the concern is contamination and ritual neutralization rather than fear of having a disease",
-        "Generalized Anxiety Disorder because the pattern is obsession-compulsion driven, not diffuse worry",
-        "Specific Phobia because the rituals and intrusive thoughts extend beyond simple avoidance of a discrete object or situation"
-      ]
+      "correctDiagnosis": "Schizotypal Personality Disorder",
+      "diagnosisCode": "F21"
     },
     {
       "id": "patient-6",
-      "correctDiagnosis": "Major Depressive Disorder",
-      "supportingFeatures": [
-        "Low mood and loss of interest",
-        "Vegetative and cognitive symptoms including appetite, sleep, and concentration changes",
-        "Episode duration and impairment without evidence of mania"
-      ],
-      "ruleOuts": [
-        "Persistent Depressive Disorder because the available timeline reflects an acute major episode rather than chronic multi-year depressed mood",
-        "Adjustment Disorder with Depressed Mood because the symptom severity and syndrome pattern exceed a brief adjustment response",
-        "Bipolar II Disorder because there is no evidence of hypomanic episodes"
-      ]
+      "correctDiagnosis": "Disinhibited Social Engagement Disorder",
+      "diagnosisCode": "F94.2"
     }
   ]
 }
