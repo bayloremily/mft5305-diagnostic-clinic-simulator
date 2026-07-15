@@ -8,28 +8,28 @@
     },
     {
       "id": "patient-2",
-      "correctDiagnosis": "Developmental Coordination Disorder",
-      "diagnosisCode": "F82"
+      "correctDiagnosis": "Prolonged Grief Disorder",
+      "diagnosisCode": "F43.81"
     },
     {
       "id": "patient-3",
-      "correctDiagnosis": "Schizoaffective Disorder, Depressive Type",
-      "diagnosisCode": "F25.1"
+      "correctDiagnosis": "Schizophreniform Disorder",
+      "diagnosisCode": "F20.81"
     },
     {
       "id": "patient-4",
-      "correctDiagnosis": "Generalized Anxiety Disorder",
-      "diagnosisCode": "F41.1"
+      "correctDiagnosis": "Persistent Depressive Disorder",
+      "diagnosisCode": "F34.1"
     },
     {
       "id": "patient-5",
-      "correctDiagnosis": "Schizotypal Personality Disorder",
-      "diagnosisCode": "F21"
+      "correctDiagnosis": "Bulimia Nervosa",
+      "diagnosisCode": "F50.2"
     },
     {
       "id": "patient-6",
-      "correctDiagnosis": "Disinhibited Social Engagement Disorder",
-      "diagnosisCode": "F94.2"
+      "correctDiagnosis": "Schizotypal Personality Disorder",
+      "diagnosisCode": "F21"
     }
   ]
 }

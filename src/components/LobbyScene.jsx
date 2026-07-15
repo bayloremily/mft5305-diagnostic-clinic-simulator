@@ -1,7 +1,7 @@
 import { PanoramaViewer } from './PanoramaViewer'
 import { buildLobbyHotspots } from '../lib/roomHotspots'
 
-const LOBBY_IMAGE_PATH = '/assets/Lobby.png'
+const LOBBY_IMAGE_PATH = '/assets/UPDATED_Lobby.png'
 
 export function LobbyScene({
   cases,
@@ -34,7 +34,7 @@ export function LobbyScene({
     <PanoramaViewer
       imagePath={LOBBY_IMAGE_PATH}
       loadingText="Loading 360 hospital lobby..."
-      errorText="The lobby panorama could not be loaded. Check /public/assets/Lobby.png."
+      errorText="The lobby panorama could not be loaded. Check /public/assets/UPDATED_Lobby.png."
       hotspots={hotspots}
       exploredHotspotIds={exploredHotspotIds}
       onHotspotClick={onHotspotClick}

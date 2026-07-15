@@ -5,8 +5,8 @@ const ROOM_IMAGE_BY_PATIENT = {
   1: '/assets/Patient-1.png',
   2: '/assets/Patient-2.png',
   3: '/assets/Patient-3.png',
-  4: '/assets/Patient-5.png',
-  5: '/assets/Patient-4.png',
+  4: '/assets/Patient-4.png',
+  5: '/assets/Patient-5.png',
   6: '/assets/Patient-6.png',
 }
 

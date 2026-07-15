@@ -481,6 +481,35 @@ textarea {
   color: var(--text);
 }
 
+.lobby-pdf-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.lobby-pdf-copy,
+.lobby-pdf-actions {
+  flex: 1;
+}
+
+.lobby-pdf-actions {
+  display: grid;
+  justify-items: end;
+  gap: 0.7rem;
+}
+
+.pdf-helper-copy {
+  margin: 0;
+  text-align: right;
+}
+
+.error-note {
+  margin: 1rem 0 0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
 .room-list,
 .hotspot-list {
   list-style: none;
@@ -1016,5 +1045,18 @@ textarea {
 
   .button-row button {
     flex: 1 1 100%;
+  }
+
+  .lobby-pdf-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lobby-pdf-actions {
+    justify-items: stretch;
+  }
+
+  .pdf-helper-copy {
+    text-align: left;
   }
 }

@@ -11,11 +11,11 @@
       "synopsis": "Marcus T. is a 15-year-old referred by his school because of long-standing academic and daily-living concerns. Since early elementary school, he has struggled to keep up with age-level learning. He reads at approximately a second- to third-grade level and needs new information broken into simple steps and repeated many times. Even with support and extra time, he often forgets instructions from one day to the next.",
       "diagnosisOptions": [
         "Intellectual Developmental Disorder, Moderate Severity",
-        "Developmental Coordination Disorder",
-        "Schizoaffective Disorder, Depressive Type",
-        "Generalized Anxiety Disorder",
-        "Schizotypal Personality Disorder",
-        "Disinhibited Social Engagement Disorder"
+        "Prolonged Grief Disorder",
+        "Schizophreniform Disorder",
+        "Persistent Depressive Disorder",
+        "Bulimia Nervosa",
+        "Schizotypal Personality Disorder"
       ],
       "hotspots": [
         {
@@ -79,19 +79,19 @@
     {
       "id": "patient-2",
       "patientNumber": 2,
-      "patientName": "Lena S.",
-      "patientAge": "9-year-old",
-      "presentingConcern": "Coordination difficulties across school and home",
+      "patientName": "Renee M.",
+      "patientAge": "52-year-old Latina woman",
+      "presentingConcern": "Persistent grief, avoidance, and declining functioning after her husband's death",
       "referralSource": "No additional information is available in this portion of the case record.",
       "primaryGoal": "No additional information is available in this portion of the case record.",
-      "synopsis": "Lena S. is a 9-year-old who has been described as clumsy since early childhood. She frequently bumps into objects, drops items, and struggles with tasks requiring coordination. These difficulties occur daily at school and at home.",
+      "synopsis": "Renee M. is a 52-year-old Latina woman whose husband died 22 months ago. She has tried to focus on other things in her life, like tending her rose garden and taking pottery classes. She has continued to experience intense yearning, difficulty accepting the death, avoidance of reminders, and withdrawal from social and meaningful activities for the past 18 months.",
       "diagnosisOptions": [
         "Intellectual Developmental Disorder, Moderate Severity",
-        "Developmental Coordination Disorder",
-        "Schizoaffective Disorder, Depressive Type",
-        "Generalized Anxiety Disorder",
-        "Schizotypal Personality Disorder",
-        "Disinhibited Social Engagement Disorder"
+        "Prolonged Grief Disorder",
+        "Schizophreniform Disorder",
+        "Persistent Depressive Disorder",
+        "Bulimia Nervosa",
+        "Schizotypal Personality Disorder"
       ],
       "hotspots": [
         {
@@ -100,15 +100,15 @@
           "label": "Patient Interview",
           "title": "Patient Interview",
           "summary": "Interview notes from the case record.",
-          "detail": "Lena has been described as clumsy since early childhood. She frequently bumps into objects, drops items, and struggles with tasks requiring coordination."
+          "detail": "Renee says she has continued to experience intense yearning and difficulty accepting her husband's death."
         },
         {
           "id": "intake-chart",
           "anchor": "chart",
           "label": "Intake Chart",
           "title": "Intake Chart",
-          "summary": "School and intake information from the case record.",
-          "detail": "Her handwriting is slow and difficult to read, and her hand becomes tired during written assignments. She avoids drawing and writing when possible."
+          "summary": "Intake information from the case record.",
+          "detail": "Her husband's death occurred 22 months ago, and the grief-related symptoms have continued for the past 18 months."
         },
         {
           "id": "observation-notes",
@@ -116,7 +116,7 @@
           "label": "Observation Notes",
           "title": "Observation Notes",
           "summary": "Behavioral observations described in the vignette.",
-          "detail": "During physical activities, Lena has trouble catching balls, maintaining balance, and coordinating movements."
+          "detail": "Renee shows avoidance of reminders and withdrawal from social and meaningful activities."
         },
         {
           "id": "medication-history",
@@ -124,7 +124,7 @@
           "label": "Medication / History Record",
           "title": "Medication / History Record",
           "summary": "History information from the case record.",
-          "detail": "At home, dressing takes longer than expected, especially when tying shoes or fastening buttons."
+          "detail": "Renee has tried to focus on other parts of her life, including tending her rose garden and taking pottery classes."
         },
         {
           "id": "collateral-note",
@@ -132,7 +132,7 @@
           "label": "Family or Collateral Note",
           "title": "Family or Collateral Note",
           "summary": "Collateral information from the case record.",
-          "detail": "Lena understands instructions, learns new concepts, and performs well academically when tasks do not depend heavily on writing or physical coordination. Her motor difficulties have been present for several years and are beginning to affect her confidence and willingness to participate."
+          "detail": "Renee has always looked forward to working because she enjoys being a nurse, but she has been managing a significant decline in work functioning."
         },
         {
           "id": "environmental-observation",
@@ -140,7 +140,7 @@
           "label": "Environmental Observation",
           "title": "Environmental Observation",
           "summary": "Environmental record review.",
-          "detail": "No additional information is available in this portion of the case record."
+          "detail": "Her Labrador keeps her company and yet is a daily reminder of her husband's death."
         }
       ],
       "completionRequired": [
@@ -155,19 +155,19 @@
     {
       "id": "patient-3",
       "patientNumber": 3,
-      "patientName": "Anthony R.",
-      "patientAge": "28-year-old",
-      "presentingConcern": "Withdrawal, depressive symptoms, and psychotic symptoms",
+      "patientName": "Evan M.",
+      "patientAge": "24-year-old White man",
+      "presentingConcern": "Behavioral changes, suspicious beliefs, and unusual perceptual experiences",
       "referralSource": "No additional information is available in this portion of the case record.",
       "primaryGoal": "No additional information is available in this portion of the case record.",
-      "synopsis": "Anthony R. is a 28-year-old who has shown increasing withdrawal and unusual behavior over the past six months. During several multi-week periods, he experiences depressed mood, low energy, loss of interest, difficulty getting out of bed, impaired concentration, and hopelessness.",
+      "synopsis": "Evan M. is a 24-year-old White man brought to an outpatient clinic by his parents after several weeks of behavioral changes. He has developed suspicious beliefs that coworkers are sending him hidden messages and reports occasionally hearing his name spoken when no one is present.",
       "diagnosisOptions": [
         "Intellectual Developmental Disorder, Moderate Severity",
-        "Developmental Coordination Disorder",
-        "Schizoaffective Disorder, Depressive Type",
-        "Generalized Anxiety Disorder",
-        "Schizotypal Personality Disorder",
-        "Disinhibited Social Engagement Disorder"
+        "Prolonged Grief Disorder",
+        "Schizophreniform Disorder",
+        "Persistent Depressive Disorder",
+        "Bulimia Nervosa",
+        "Schizotypal Personality Disorder"
       ],
       "hotspots": [
         {
@@ -176,7 +176,7 @@
           "label": "Patient Interview",
           "title": "Patient Interview",
           "summary": "Interview notes from the case record.",
-          "detail": "During several multi-week periods, Anthony experiences depressed mood, low energy, loss of interest, difficulty getting out of bed, impaired concentration, and hopelessness."
+          "detail": "Evan reports suspicious beliefs that coworkers are sending him hidden messages and says he occasionally hears his name spoken when no one is present."
         },
         {
           "id": "intake-chart",
@@ -184,7 +184,7 @@
           "label": "Intake Chart",
           "title": "Intake Chart",
           "summary": "Intake information from the case record.",
-          "detail": "Anthony reports hearing a voice that comments negatively on his actions. He believes others may be watching or following him and has begun avoiding leaving home."
+          "detail": "Evan was brought to an outpatient clinic by his parents after several weeks of behavioral changes. His symptoms have persisted for approximately six weeks."
         },
         {
           "id": "observation-notes",
@@ -192,7 +192,7 @@
           "label": "Observation Notes",
           "title": "Observation Notes",
           "summary": "Behavioral observations described in the vignette.",
-          "detail": "These psychotic symptoms occur multiple times per week and sometimes daily."
+          "detail": "His speech has become tangential."
         },
         {
           "id": "medication-history",
@@ -200,7 +200,7 @@
           "label": "Medication / History Record",
           "title": "Medication / History Record",
           "summary": "History information from the case record.",
-          "detail": "There is no evidence that substance use or a medical condition explains the symptoms."
+          "detail": "There is no substance use history."
         },
         {
           "id": "collateral-note",
@@ -208,7 +208,7 @@
           "label": "Family or Collateral Note",
           "title": "Family or Collateral Note",
           "summary": "Collateral information from the case record.",
-          "detail": "Family members report that the hallucinations and suspiciousness continue even when Anthony's mood improves. There have been periods lasting approximately two weeks when he was less depressed but continued to hear voices and act suspiciously."
+          "detail": "His parents report several weeks of behavioral changes."
         },
         {
           "id": "environmental-observation",
@@ -216,7 +216,7 @@
           "label": "Environmental Observation",
           "title": "Environmental Observation",
           "summary": "Environmental record review.",
-          "detail": "Anthony has stopped working and rarely interacts with friends or family."
+          "detail": "Evan has taken a leave from his IT job due to difficulty concentrating. He enjoys jogging and repairing computers, but has withdrawn from these activities."
         }
       ],
       "completionRequired": [
@@ -231,19 +231,19 @@
     {
       "id": "patient-4",
       "patientNumber": 4,
-      "patientName": "Rachel M.",
-      "patientAge": "34-year-old",
-      "presentingConcern": "Chronic worry and tension",
+      "patientName": "Maria L.",
+      "patientAge": "47-year-old Latina woman",
+      "presentingConcern": "Chronic sadness, low energy, and low self-worth",
       "referralSource": "No additional information is available in this portion of the case record.",
       "primaryGoal": "No additional information is available in this portion of the case record.",
-      "synopsis": "Rachel M. is a 34-year-old who has felt worried and tense almost every day for the past two years. She worries about numerous areas of her life, including work, finances, health, and family. She finds the worry difficult to control, and one concern quickly shifts to another.",
+      "synopsis": "Maria L. is a 47-year-old Latina woman who has spent the past three and a half years living with what she describes as a constant heaviness, a chronic sense of sadness woven into her daily routine. Working as a library assistant, she moves through most days on autopilot, battling low energy, poor appetite, and a steady undercurrent of low self-worth while even small decisions take outsized effort.",
       "diagnosisOptions": [
         "Intellectual Developmental Disorder, Moderate Severity",
-        "Developmental Coordination Disorder",
-        "Schizoaffective Disorder, Depressive Type",
-        "Generalized Anxiety Disorder",
-        "Schizotypal Personality Disorder",
-        "Disinhibited Social Engagement Disorder"
+        "Prolonged Grief Disorder",
+        "Persistent Depressive Disorder",
+        "Schizophreniform Disorder",
+        "Bulimia Nervosa",
+        "Schizotypal Personality Disorder"
       ],
       "hotspots": [
         {
@@ -252,7 +252,7 @@
           "label": "Patient Interview",
           "title": "Patient Interview",
           "summary": "Interview notes from the case record.",
-          "detail": "Rachel spends several hours each day anticipating potential problems and preparing for worst-case scenarios. Even when nothing is wrong, she feels uneasy and expects something bad may happen."
+          "detail": "Maria describes a constant heaviness and a chronic sense of sadness that has been woven into her daily routine for the past three and a half years."
         },
         {
           "id": "intake-chart",
@@ -260,7 +260,7 @@
           "label": "Intake Chart",
           "title": "Intake Chart",
           "summary": "Intake information from the case record.",
-          "detail": "The worry interferes with Rachel's concentration at work and her ability to relax."
+          "detail": "She reports low energy, poor appetite, and a steady undercurrent of low self-worth. Even small decisions take outsized effort."
         },
         {
           "id": "observation-notes",
@@ -268,7 +268,7 @@
           "label": "Observation Notes",
           "title": "Observation Notes",
           "summary": "Behavioral observations described in the vignette.",
-          "detail": "Her symptoms occur across many situations and remain relatively consistent rather than appearing in brief episodes."
+          "detail": "Maria moves through most days on autopilot and continues to meet family and work responsibilities, but the emotional weight never fully lifts."
         },
         {
           "id": "medication-history",
@@ -276,7 +276,7 @@
           "label": "Medication / History Record",
           "title": "Medication / History Record",
           "summary": "History information from the case record.",
-          "detail": "She experiences muscle tension, fatigue, restlessness, irritability, mental exhaustion, and difficulty sleeping."
+          "detail": "She cannot recall any stretch longer than a few weeks during which the mood lifted completely, and she denies ever having periods of distinctly elevated mood or increased goal-directed energy."
         },
         {
           "id": "collateral-note",
@@ -292,7 +292,7 @@
           "label": "Environmental Observation",
           "title": "Environmental Observation",
           "summary": "Environmental record review.",
-          "detail": "No additional information is available in this portion of the case record."
+          "detail": "Outside of work, Maria tends a small tomato garden and listens to mystery audiobooks in the evenings, often realizing she has zoned out and needs to replay chapters."
         }
       ],
       "completionRequired": [
@@ -307,19 +307,19 @@
     {
       "id": "patient-5",
       "patientNumber": 5,
-      "patientName": "Evan L.",
-      "patientAge": "25-year-old",
-      "presentingConcern": "Long-standing difficulty connecting with others",
+      "patientName": "Jordan K.",
+      "patientAge": "22-year-old college student",
+      "presentingConcern": "Restricting, binge eating, compensatory behaviors, and weight-related preoccupation",
       "referralSource": "No additional information is available in this portion of the case record.",
       "primaryGoal": "No additional information is available in this portion of the case record.",
-      "synopsis": "Evan L. is a 25-year-old with a long-standing pattern of difficulty connecting with others. Since his late teens, others have described him as unusual or difficult to understand. He believes certain events or coincidences carry special personal meaning and that he can sense things others cannot.",
+      "synopsis": "Jordan K. is a 22-year-old college student who sought help after becoming increasingly concerned about eating habits, weight, and health over the past year. Jordan reports trying to eat clean and often starts the day with the intention of limiting food intake to stay in control.",
       "diagnosisOptions": [
         "Intellectual Developmental Disorder, Moderate Severity",
-        "Developmental Coordination Disorder",
-        "Schizoaffective Disorder, Depressive Type",
-        "Generalized Anxiety Disorder",
-        "Schizotypal Personality Disorder",
-        "Disinhibited Social Engagement Disorder"
+        "Prolonged Grief Disorder",
+        "Bulimia Nervosa",
+        "Persistent Depressive Disorder",
+        "Schizophreniform Disorder",
+        "Schizotypal Personality Disorder"
       ],
       "hotspots": [
         {
@@ -328,7 +328,7 @@
           "label": "Patient Interview",
           "title": "Patient Interview",
           "summary": "Interview notes from the case record.",
-          "detail": "Evan believes certain events or coincidences carry special personal meaning and that he can sense things others cannot."
+          "detail": "Jordan reports trying to eat clean and often starts the day with the intention of limiting food intake to stay in control, sometimes by skipping meals or restricting certain foods believed to lead to weight gain."
         },
         {
           "id": "intake-chart",
@@ -336,7 +336,7 @@
           "label": "Intake Chart",
           "title": "Intake Chart",
           "summary": "Intake information from the case record.",
-          "detail": "His speech may be vague, abstract, or difficult to follow, and he dresses and behaves in unconventional ways."
+          "detail": "Several times per week for the past eight months, Jordan has experienced repeated episodes of eating large amounts of food in a short period of time, usually in the evening when alone, with a sense of being unable to stop."
         },
         {
           "id": "observation-notes",
@@ -344,7 +344,7 @@
           "label": "Observation Notes",
           "title": "Observation Notes",
           "summary": "Behavioral observations described in the vignette.",
-          "detail": "He feels uncomfortable in social situations and often assumes others are judging him or talking about him without sufficient evidence."
+          "detail": "Jordan describes these eating episodes as feeling disconnected or on autopilot and says they continue even when physically uncomfortable."
         },
         {
           "id": "medication-history",
@@ -352,7 +352,7 @@
           "label": "Medication / History Record",
           "title": "Medication / History Record",
           "summary": "History information from the case record.",
-          "detail": "These patterns have remained consistent for several years."
+          "detail": "Afterward, Jordan experiences intense guilt, embarrassment, and fear of gaining weight. Jordan regularly engages in self-induced vomiting and, less frequently, uses laxatives. On other days, Jordan compensates by fasting, exercising for long periods, or trying to strictly control food intake again."
         },
         {
           "id": "collateral-note",
@@ -360,7 +360,7 @@
           "label": "Family or Collateral Note",
           "title": "Family or Collateral Note",
           "summary": "Collateral information from the case record.",
-          "detail": "Evan has few close relationships, although he does express some desire for connection. His beliefs are unusual, but he can sometimes question them when challenged."
+          "detail": "Friends have noticed that Jordan sometimes avoids meals with others or excuses themselves shortly after eating, though Jordan has largely kept these behaviors hidden."
         },
         {
           "id": "environmental-observation",
@@ -368,7 +368,7 @@
           "label": "Environmental Observation",
           "title": "Environmental Observation",
           "summary": "Environmental record review.",
-          "detail": "He does not report persistent hallucinations or fully losing contact with reality."
+          "detail": "Jordan's weight has remained within a typical range, but there is significant preoccupation with body shape and fear of weight gain. These behaviors interfere with concentration in class, social events that involve food, and day-to-day functioning. There is no evidence of a medical condition explaining the symptoms, and Jordan does not report episodes of overeating without attempts to compensate."
         }
       ],
       "completionRequired": [
@@ -383,19 +383,19 @@
     {
       "id": "patient-6",
       "patientNumber": 6,
-      "patientName": "Kayla J.",
-      "patientAge": "5-year-old",
-      "presentingConcern": "Excessive familiarity with unfamiliar adults",
+      "patientName": "Jonah R.",
+      "patientAge": "29-year-old White man",
+      "presentingConcern": "Chronic social discomfort, odd beliefs, and suspiciousness",
       "referralSource": "No additional information is available in this portion of the case record.",
       "primaryGoal": "No additional information is available in this portion of the case record.",
-      "synopsis": "Kayla J. is a 5-year-old living with a foster family after experiencing multiple caregiver changes during early childhood. During her first three years, she moved between several homes and did not have a consistent caregiver.",
+      "synopsis": "Jonah R. is a 29-year-old White man who has struggled for the past several years to maintain close relationships, often feeling like he does not fit in with others. He spends most evenings alone reading about astrology and obscure spiritual systems, believing that certain planetary alignments allow him to sense others' intentions.",
       "diagnosisOptions": [
         "Intellectual Developmental Disorder, Moderate Severity",
-        "Developmental Coordination Disorder",
-        "Schizoaffective Disorder, Depressive Type",
-        "Generalized Anxiety Disorder",
-        "Schizotypal Personality Disorder",
-        "Disinhibited Social Engagement Disorder"
+        "Prolonged Grief Disorder",
+        "Schizophreniform Disorder",
+        "Persistent Depressive Disorder",
+        "Bulimia Nervosa",
+        "Schizotypal Personality Disorder"
       ],
       "hotspots": [
         {
@@ -404,7 +404,7 @@
           "label": "Patient Interview",
           "title": "Patient Interview",
           "summary": "Interview notes from the case record.",
-          "detail": "Kayla frequently approaches unfamiliar adults with excessive familiarity and little caution. She walks up to strangers, begins conversations easily, and may seek physical closeness without hesitation."
+          "detail": "Jonah reports that certain planetary alignments allow him to sense others' intentions. He says he sometimes feels subtle messages in the way streetlights flicker or in overheard fragments of conversation, though he acknowledges he may be reading too much into things."
         },
         {
           "id": "intake-chart",
@@ -412,7 +412,7 @@
           "label": "Intake Chart",
           "title": "Intake Chart",
           "summary": "Intake information from the case record.",
-          "detail": "These behaviors occur in stores, parks, school, and other settings."
+          "detail": "For the past several years, Jonah has struggled to maintain close relationships and often feels like he does not fit in with others."
         },
         {
           "id": "observation-notes",
@@ -420,7 +420,7 @@
           "label": "Observation Notes",
           "title": "Observation Notes",
           "summary": "Behavioral observations described in the vignette.",
-          "detail": "When she is with her caregivers, Kayla may wander away to interact with unfamiliar adults without checking back or demonstrating awareness of safety concerns."
+          "detail": "Coworkers describe Jonah as socially awkward, and he avoids office gatherings because he feels people can sense his anxiety."
         },
         {
           "id": "medication-history",
@@ -428,7 +428,7 @@
           "label": "Medication / History Record",
           "title": "Medication / History Record",
           "summary": "History information from the case record.",
-          "detail": "During her first three years, Kayla moved between several homes and did not have a consistent caregiver."
+          "detail": "Jonah has no history of psychosis, but he experiences chronic social discomfort, odd speech patterns, and persistent suspicion that others judge him harshly."
         },
         {
           "id": "collateral-note",
@@ -436,7 +436,7 @@
           "label": "Family or Collateral Note",
           "title": "Family or Collateral Note",
           "summary": "Collateral information from the case record.",
-          "detail": "She treats unfamiliar adults much like familiar caregivers. These behaviors have continued for over a year despite placement in a more stable and supportive home."
+          "detail": "No additional information is available in this portion of the case record."
         },
         {
           "id": "environmental-observation",
@@ -444,7 +444,7 @@
           "label": "Environmental Observation",
           "title": "Environmental Observation",
           "summary": "Environmental record review.",
-          "detail": "No additional information is available in this portion of the case record."
+          "detail": "Jonah spends most evenings alone reading about astrology and obscure spiritual systems. He enjoys sketching fantasy landscapes and caring for his pet gecko."
         }
       ],
       "completionRequired": [
