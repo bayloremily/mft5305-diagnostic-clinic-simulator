@@ -124,7 +124,7 @@ function createEmptyCaseState(caseId) {
 function createDefaultState() {
   return {
     launched: false,
-    phase: 'cover',
+    phase: 'lobby',
     activeCaseId: null,
     timerEndsAt: null,
     cases: Object.fromEntries(casesData.cases.map((caseItem) => [caseItem.id, createEmptyCaseState(caseItem.id)])),
@@ -413,9 +413,12 @@ function App() {
     !timerDisabled && simState.launched && simState.timerEndsAt && timerExpired && !requiredAssessmentsComplete,
   )
   const displayPhase = simulationTimedOut ? 'timeout' : simState.phase
+  const prelaunchMode = !simState.launched
   const timerState = timerDisabled ? 'normal' : getTimerState(remainingSeconds)
   const timerMessage = requiredAssessmentsComplete
     ? 'Assessment requirement complete'
+    : prelaunchMode
+      ? 'Timer begins when you launch the clinic'
     : timerDisabled
       ? 'Timer Disabled (Development Mode)'
       : getTimerMessage(remainingSeconds)
@@ -439,6 +442,7 @@ function App() {
     allRoomsComplete: requiredAssessmentsComplete,
   })
   const hasPanoramaOverlay =
+    prelaunchMode ||
     displayPhase === 'synopsis' ||
     lobbyOverlay === 'instructions' ||
     (!authorMode && Boolean(selectedRoomHotspot))
@@ -451,7 +455,7 @@ function App() {
       return
     }
 
-    scorm.setValue('cmi.core.lesson_location', 'cover')
+    scorm.setValue('cmi.core.lesson_location', 'lobby')
     scorm.setValue('cmi.core.lesson_status', 'not attempted')
     scorm.setValue('cmi.core.score.min', '0')
     scorm.setValue('cmi.core.score.max', '100')
@@ -459,27 +463,6 @@ function App() {
     scorm.setValue('cmi.core.exit', '')
     scorm.setValue('cmi.suspend_data', '')
     scorm.commit()
-  }
-
-  function resetAttemptUiState() {
-    setClockNow(Date.now())
-    setSelectedHotspotId(null)
-    setLobbyOverlay(null)
-    setDraggingAuthorHotspotId(null)
-    setAuthorMode(false)
-    setAuthorJsonPanelOpen(false)
-    setAuthorJsonCopied(false)
-    setAuthorSavedAt(null)
-    setAuthorSaveError('')
-    setPdfError('')
-    setPdfGenerating(false)
-    setSimState(createDefaultState())
-  }
-
-  function restartSimulation() {
-    clearAttemptStorage()
-    clearAttemptScormState()
-    resetAttemptUiState()
   }
 
   useEffect(() => {
@@ -554,13 +537,6 @@ function App() {
         ...currentState.cases,
         [caseId]: updater(currentState.cases[caseId]),
       },
-    }))
-  }
-
-  function openInstructions() {
-    setSimState((currentState) => ({
-      ...currentState,
-      phase: 'instructions',
     }))
   }
 
@@ -763,6 +739,10 @@ function App() {
       return
     }
 
+    if (!simState.launched) {
+      return
+    }
+
     if (hotspotId === 'instructions') {
       setLobbyOverlay('instructions')
       return
@@ -861,98 +841,6 @@ function App() {
     }
   }
 
-  if (!simState.launched && simState.phase === 'cover') {
-    return (
-      <main className="landing-shell">
-        <section className="cover-card">
-          <div className="cover-copy">
-            <p className="eyebrow">MFT 5305 Interactive Simulation</p>
-            <h1>Diagnostic Clinic Simulator</h1>
-            <p className="lead">
-              Work a six-patient hospital floor, inspect every chart and bedside clue, and document clinical
-              reasoning before the clock runs out.
-            </p>
-            <div className="cover-badges">
-              <span>6 patient rooms</span>
-              <span>SCORM 1.2 ready</span>
-              <span>2.5-hour timer</span>
-            </div>
-            <div className="button-row">
-              <button type="button" onClick={openInstructions}>
-                Enter Simulation
-              </button>
-            </div>
-          </div>
-          <div className="cover-stage">
-            <div className="cover-stage-grid" />
-            <div className="cover-monitor">
-              <div className="cover-monitor-screen">
-                <span>INTAKE</span>
-                <strong>Patient Flow Online</strong>
-                <small>Lobby, six rooms, full checklist tracking</small>
-              </div>
-            </div>
-            <div className="cover-pillars">
-              <div />
-              <div />
-              <div />
-            </div>
-          </div>
-        </section>
-      </main>
-    )
-  }
-
-  if (!simState.launched && simState.phase === 'instructions') {
-    return (
-      <main className="landing-shell">
-        <section className="instruction-card">
-          <p className="eyebrow">Before You Launch</p>
-          <h1>Clinical Floor Instructions</h1>
-          <div className="instruction-grid">
-            <article>
-              <h2>Objective</h2>
-              <p>
-                Move through the lobby and choose any three patient rooms to complete. In each selected room, review
-                all required hotspots before you submit a diagnosis, supporting evidence, and differential notes.
-              </p>
-            </article>
-            <article>
-              <h2>Navigation</h2>
-              <p>
-                Door selections open a case-file overlay first. Inside each room, you can use either the 3D hotspots
-                or the keyboard-accessible hotspot list in the side panel.
-              </p>
-            </article>
-            <article>
-              <h2>Timer</h2>
-              <p>
-                The simulation runs for 2.5 hours once launched. Warning states appear at 30 minutes, 10 minutes,
-                and 2 minutes remaining.
-              </p>
-            </article>
-            <article>
-              <h2>Restarting</h2>
-              <p>
-                You may restart the simulation and complete it again at any time. When you exit or restart, your
-                current answers, feedback, progress, and results will be cleared. Each new attempt begins from the
-                start.
-              </p>
-            </article>
-          </div>
-          <div className="button-row">
-            <button type="button" className="ghost" onClick={restartSimulation}>
-              Back to Cover
-            </button>
-            <button type="button" onClick={launchSimulation}>
-              Launch Hospital Floor
-            </button>
-          </div>
-        </section>
-      </main>
-    )
-  }
-
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -961,7 +849,7 @@ function App() {
           <h1>Diagnostic Clinic Simulator</h1>
           <p className="subtitle">
             Review clinical evidence carefully, complete any three patient assessments, and download your submission
-            PDF when the required work is finished.
+            PDF before exiting the simulation.
           </p>
         </div>
 
@@ -980,13 +868,6 @@ function App() {
               <small>{simState.activeCaseId ? `Current room: Patient ${activeCase?.patientNumber}` : 'Lobby overview'}</small>
             </div>
           </div>
-          {simState.launched && (
-            <div className="dev-timer-row">
-              <button type="button" className="ghost dev-timer-button" onClick={restartSimulation}>
-                Restart Simulation
-              </button>
-            </div>
-          )}
           {timerResetEnabled && simState.launched && (
             <div className="dev-timer-row">
               <button type="button" className="ghost dev-timer-button" onClick={handleResetTimer}>
@@ -1079,6 +960,65 @@ function App() {
               />
             )}
 
+            {prelaunchMode && (
+              <>
+                <div className="panorama-overlay-backdrop is-prelaunch" />
+                <section className="prelaunch-panel-shell">
+                  <article className="overlay-card prelaunch-panel">
+                    <p className="eyebrow">1. Begin</p>
+                    <h2>Welcome to the Clinic Floor</h2>
+                    <p className="panel-copy">
+                      Review the information below before you launch the clinic. The clinic floor is visible now, but
+                      patient rooms and hotspots will remain inactive until you begin the timed attempt.
+                    </p>
+                  </article>
+
+                  <article className="overlay-card prelaunch-panel prelaunch-panel-wide">
+                    <p className="eyebrow">2. Objectives and Important Information</p>
+                    <div className="prelaunch-info-grid">
+                      <div>
+                        <h2>Objective</h2>
+                        <p>
+                          Complete any three of the six patient assessments. In each selected room, review all
+                          required hotspots before you submit a diagnosis, supporting evidence, and differential notes.
+                        </p>
+                      </div>
+                      <div>
+                        <h2>Navigation</h2>
+                        <p>
+                          Select a patient room from the clinic floor to open the case file first. After reviewing the
+                          case, continue into the room and use the hotspots or accessible hotspot list to gather
+                          evidence.
+                        </p>
+                      </div>
+                      <div>
+                        <h2>Timer and Completion</h2>
+                        <p>
+                          Your timer begins when you select Launch Clinic. Complete any three patient assessments
+                          during the 2.5-hour clinical window, and download your submission PDF before exiting.
+                        </p>
+                      </div>
+                      <div>
+                        <h2>Attempt and Exit Information</h2>
+                        <p>
+                          Your timer begins when you select Launch Clinic. Complete any three patient assessments
+                          during the 2.5-hour clinical window. If you exit or close the simulation before downloading
+                          your submission PDF, all answers, progress, feedback, and results from the current attempt
+                          will be permanently cleared. Reopening the simulation will begin a new attempt from the
+                          start.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="button-row">
+                      <button type="button" onClick={launchSimulation}>
+                        Launch Clinic
+                      </button>
+                    </div>
+                  </article>
+                </section>
+              </>
+            )}
+
             {displayPhase === 'room' && activeCase && (
               <button type="button" className="ghost panorama-back-button" onClick={returnToLobby}>
                 Back to Lobby
@@ -1145,7 +1085,8 @@ function App() {
                     <li>Use the Word document to take notes.</li>
                     <li>Submit diagnosis, supporting evidence, and rule-outs.</li>
                     <li>Complete any three patient assessments before time expires.</li>
-                    <li>Restarting begins a new attempt and clears previous answers, progress, and results.</li>
+                    <li>Download your submission PDF before closing the simulation.</li>
+                    <li>Leaving the webpage clears the current attempt and starts a new attempt on reopening.</li>
                   </ul>
                 </section>
               </>
@@ -1296,8 +1237,8 @@ function App() {
               <p className="eyebrow">Time Expired</p>
               <h2>Clinical Window Closed</h2>
               <p className="panel-copy">
-                The 2.5-hour timer has ended. You may begin a new attempt at any time, and restarting will clear the
-                previous attempt before sending you back to the beginning.
+                The 2.5-hour timer has ended. If you leave this webpage and return later, the simulator will begin
+                again from the start with a new attempt.
               </p>
               <p className="score-line">
                 Assessments completed: <strong>{Math.min(completedRooms, REQUIRED_ASSESSMENTS)} / {REQUIRED_ASSESSMENTS}</strong>
