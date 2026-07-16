@@ -148,11 +148,19 @@ textarea {
   box-shadow: none;
 }
 
+.landing-shell,
 .app-shell {
   min-height: 100vh;
   padding: 2rem;
 }
 
+.landing-shell {
+  display: grid;
+  place-items: center;
+}
+
+.cover-card,
+.instruction-card,
 .panel,
 .overlay-card,
 .timer-card,
@@ -163,6 +171,17 @@ textarea {
   box-shadow: var(--shadow);
 }
 
+.cover-card {
+  width: min(78rem, 100%);
+  border-radius: 36px;
+  padding: 2.2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
+  gap: 2rem;
+}
+
+.cover-copy h1,
+.instruction-card h1,
 .topbar h1,
 .panel h2,
 .overlay-card h2 {
@@ -171,7 +190,8 @@ textarea {
   letter-spacing: -0.02em;
 }
 
-.topbar h1,
+.cover-copy h1,
+.instruction-card h1,
 .topbar h1 {
   font-size: clamp(2.4rem, 5vw, 4.6rem);
   line-height: 0.96;
@@ -185,14 +205,29 @@ textarea {
   color: var(--accent);
 }
 
+.lead,
 .subtitle,
 .panel-copy,
 .meta-line,
-.detail-card p {
+.detail-card p,
+.instruction-card p {
   color: var(--muted);
   line-height: 1.65;
 }
 
+.lead {
+  max-width: 34rem;
+  font-size: 1.06rem;
+}
+
+.cover-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+}
+
+.cover-badges span,
 .pill {
   display: inline-flex;
   align-items: center;
@@ -204,6 +239,55 @@ textarea {
   color: var(--accent);
   font-size: 0.9rem;
   font-weight: 700;
+}
+
+.cover-stage {
+  position: relative;
+  min-height: 30rem;
+  border-radius: 30px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.25), transparent 35%),
+    linear-gradient(160deg, #173a34 0%, #20483f 45%, #8c6d1f 100%);
+}
+
+.cover-stage-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.11) 1px, transparent 1px);
+  background-size: 2.4rem 2.4rem;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1), transparent 88%);
+}
+
+.cover-monitor {
+  position: absolute;
+  right: 2rem;
+  top: 2.2rem;
+  width: min(18rem, 70%);
+  aspect-ratio: 1 / 0.74;
+  border-radius: 24px;
+  padding: 0.85rem;
+  background: rgba(14, 28, 24, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cover-monitor-screen {
+  height: 100%;
+  border-radius: 18px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  color: #f4fbf8;
+  background:
+    radial-gradient(circle at top, rgba(141, 203, 185, 0.45), transparent 40%),
+    linear-gradient(180deg, rgba(7, 18, 15, 0.92), rgba(14, 36, 31, 0.95));
+}
+
+.cover-monitor-screen span,
 .info-grid span,
 .checklist-strip span,
 .mini-card span,
@@ -214,6 +298,47 @@ textarea {
   display: block;
   color: var(--muted);
   font-size: 0.84rem;
+}
+
+.cover-monitor-screen span,
+.cover-monitor-screen small {
+  color: rgba(244, 251, 248, 0.76);
+}
+
+.cover-monitor-screen strong {
+  font-size: 1.3rem;
+}
+
+.cover-pillars {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0 2rem 2rem;
+}
+
+.cover-pillars div {
+  width: 22%;
+  height: 11rem;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, rgba(250, 252, 251, 0.3), rgba(12, 22, 19, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.instruction-card {
+  width: min(72rem, 100%);
+  border-radius: 34px;
+  padding: 2.2rem;
+}
+
+.instruction-grid {
+  margin-top: 1.4rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.instruction-grid article,
 .detail-card,
 .diagnosis-card label,
 .score-line {
@@ -221,6 +346,11 @@ textarea {
   background: rgba(245, 249, 246, 0.92);
   border: 1px solid rgba(25, 58, 48, 0.08);
   padding: 1rem;
+}
+
+.instruction-grid h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
 }
 
 .button-row {
@@ -509,11 +639,6 @@ textarea {
   z-index: 20;
 }
 
-.panorama-overlay-backdrop.is-prelaunch {
-  background: rgba(36, 48, 46, 0.42);
-  backdrop-filter: grayscale(0.35) blur(8px);
-}
-
 .panorama-overlay {
   position: absolute;
   z-index: 30;
@@ -578,52 +703,8 @@ textarea {
 
 .canvas-card.has-active-overlay .panorama-overlay,
 .canvas-card.has-active-overlay .panorama-overlay-backdrop,
-.canvas-card.has-active-overlay .overlay-card.is-panorama-modal,
-.canvas-card.has-active-overlay .prelaunch-panel-shell {
+.canvas-card.has-active-overlay .overlay-card.is-panorama-modal {
   pointer-events: auto;
-}
-
-.prelaunch-panel-shell {
-  position: absolute;
-  inset: 1rem;
-  z-index: 30;
-  display: grid;
-  align-content: center;
-  gap: 1rem;
-  pointer-events: auto;
-}
-
-.prelaunch-panel {
-  width: min(34rem, 100%);
-}
-
-.prelaunch-panel-wide {
-  width: min(64rem, 100%);
-}
-
-.prelaunch-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.prelaunch-info-grid div {
-  border-radius: 22px;
-  background: rgba(245, 249, 246, 0.92);
-  border: 1px solid rgba(25, 58, 48, 0.08);
-  padding: 1rem;
-}
-
-.prelaunch-info-grid h2 {
-  margin: 0 0 0.4rem;
-  font-size: 1.05rem;
-}
-
-.prelaunch-info-grid p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.65;
 }
 
 .tablet-frame {
@@ -868,12 +949,14 @@ textarea {
 
 @media (max-width: 1120px) {
   .topbar,
+  .cover-card,
   .workspace,
   .room-ui {
     grid-template-columns: 1fr;
   }
 
-  .topbar {
+  .topbar,
+  .cover-card {
     display: grid;
   }
 
@@ -887,17 +970,20 @@ textarea {
 }
 
 @media (max-width: 760px) {
+  .landing-shell,
   .app-shell {
     padding: 1rem;
   }
 
+  .cover-card,
+  .instruction-card,
   .panel,
   .overlay-card {
     border-radius: 24px;
   }
 
   .status-cluster,
-  .prelaunch-info-grid,
+  .instruction-grid,
   .info-grid,
   .checklist-strip,
   .content-grid {
@@ -915,12 +1001,6 @@ textarea {
 
   .overlay-card.is-panorama-modal {
     inset: 0.75rem;
-  }
-
-  .prelaunch-panel-shell {
-    inset: 0.75rem;
-    align-content: start;
-    overflow: auto;
   }
 
   .tablet-frame {
