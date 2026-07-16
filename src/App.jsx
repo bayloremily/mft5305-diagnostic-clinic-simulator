@@ -131,141 +131,17 @@ function createDefaultState() {
   }
 }
 
-function normalizeCaseState(caseId, caseState = {}) {
-  return {
-    ...createEmptyCaseState(caseId),
-    ...caseState,
-    caseId,
-    submittedAt: Number.isFinite(caseState.submittedAt) ? caseState.submittedAt : null,
-    exploredHotspots: Array.isArray(caseState.exploredHotspots)
-      ? caseState.exploredHotspots.filter((value) => typeof value === 'string')
-      : [],
-  }
-}
-
-function normalizeState(rawState) {
-  if (!rawState || typeof rawState !== 'object') {
-    return createDefaultState()
-  }
-
-  const baseState = createDefaultState()
-  const allowedPhases = ['cover', 'instructions', 'lobby', 'synopsis', 'room', 'timeout', 'complete']
-  const caseIds = new Set(casesData.cases.map((caseItem) => caseItem.id))
-
-  return {
-    ...baseState,
-    ...rawState,
-    launched: Boolean(rawState.launched),
-    phase: allowedPhases.includes(rawState.phase) ? rawState.phase : baseState.phase,
-    activeCaseId: caseIds.has(rawState.activeCaseId) ? rawState.activeCaseId : null,
-    timerEndsAt: null,
-    cases: Object.fromEntries(
-      casesData.cases.map((caseItem) => [
-        caseItem.id,
-        normalizeCaseState(caseItem.id, rawState.cases?.[caseItem.id]),
-      ]),
-    ),
-  }
-}
-
-function loadLocalState() {
+function clearAttemptStorage() {
   try {
-    const savedValue = window.localStorage.getItem(STORAGE_KEY)
-    return savedValue ? normalizeState(JSON.parse(savedValue)) : createDefaultState()
+    window.localStorage.removeItem(STORAGE_KEY)
   } catch {
-    return createDefaultState()
-  }
-}
-
-function loadSessionTimer() {
-  try {
-    const savedValue = window.sessionStorage.getItem(TIMER_SESSION_KEY)
-    const parsedValue = savedValue ? Number(savedValue) : null
-    return Number.isFinite(parsedValue) ? parsedValue : null
-  } catch {
-    return null
-  }
-}
-
-function createInitialSimState(suspendedState) {
-  const baseState = suspendedState ?? loadLocalState()
-  const sessionTimerEndsAt = loadSessionTimer()
-  const hasActiveLaunch = baseState.launched
-  const nextTimerEndsAt = DEV_DISABLE_TIMER
-    ? null
-    : sessionTimerEndsAt ?? (hasActiveLaunch ? Date.now() + TOTAL_SECONDS * 1000 : null)
-  const timedOutWithoutSessionTimer = sessionTimerEndsAt === null && baseState.phase === 'timeout'
-
-  return {
-    ...baseState,
-    phase: timedOutWithoutSessionTimer ? 'lobby' : baseState.phase,
-    activeCaseId: timedOutWithoutSessionTimer ? null : baseState.activeCaseId,
-    timerEndsAt: nextTimerEndsAt,
-  }
-}
-
-function serializeLocalState(state) {
-  return JSON.stringify({
-    ...state,
-    timerEndsAt: null,
-  })
-}
-
-function serializeSuspendData(state) {
-  return JSON.stringify({
-    l: state.launched ? 1 : 0,
-    p: state.phase,
-    a: state.activeCaseId,
-    c: Object.fromEntries(
-      Object.entries(state.cases).map(([caseId, caseState]) => [
-        caseId,
-        {
-          v: caseState.synopsisViewed ? 1 : 0,
-          h: caseState.exploredHotspots,
-          d: caseState.diagnosis,
-          r: caseState.rationale.slice(0, 400),
-          o: caseState.ruleOuts.slice(0, 400),
-          s: caseState.submitted ? 1 : 0,
-          m: caseState.completed ? 1 : 0,
-          u: caseState.submittedAt,
-        },
-      ]),
-    ),
-  })
-}
-
-function deserializeSuspendData(value) {
-  if (!value) {
-    return null
+    // Ignore localStorage cleanup failures.
   }
 
   try {
-    const parsed = JSON.parse(value)
-    return normalizeState({
-      launched: Boolean(parsed.l),
-      phase: parsed.p,
-      activeCaseId: parsed.a,
-      cases: Object.fromEntries(
-        casesData.cases.map((caseItem) => {
-          const source = parsed.c?.[caseItem.id] ?? {}
-          return [
-            caseItem.id,
-            {
-              synopsisViewed: Boolean(source.v),
-              exploredHotspots: Array.isArray(source.h) ? source.h : [],
-              diagnosis: source.d ?? '',
-              rationale: source.r ?? '',
-              ruleOuts: source.o ?? '',
-              submitted: Boolean(source.s),
-              completed: Boolean(source.m),
-              submittedAt: Number.isFinite(source.u) ? source.u : null,
-            },
-          ]
-        }),
-      ),
-    })
+    window.sessionStorage.removeItem(TIMER_SESSION_KEY)
   } catch {
-    return null
+    // Ignore sessionStorage cleanup failures.
   }
 }
 
@@ -491,17 +367,13 @@ function generateAssessmentPdf(completedCases, simState) {
 function App() {
   const [startup] = useState(() => {
     const scorm = createScormRuntime()
-    const connected = scorm.initialize()
-    const suspendedState = connected ? deserializeSuspendData(scorm.getValue('cmi.suspend_data')) : null
-
     return {
       scorm,
-      connected,
-      suspendedState,
+      connected: scorm.initialize(),
     }
   })
   const scormRef = useRef(startup.scorm)
-  const [simState, setSimState] = useState(() => createInitialSimState(startup.suspendedState))
+  const [simState, setSimState] = useState(() => createDefaultState())
   const [clockNow, setClockNow] = useState(() => Date.now())
   const [selectedHotspotId, setSelectedHotspotId] = useState(null)
   const [lobbyOverlay, setLobbyOverlay] = useState(null)
@@ -573,11 +445,53 @@ function App() {
   const showPanoramaHotspots = authorMode || !hasPanoramaOverlay
   const authorExportJson = activeAuthorSceneKey ? serializeRoomHotspots(activeAuthorSceneKey, activeAuthorHotspots) : ''
 
+  function clearAttemptScormState() {
+    const scorm = scormRef.current
+    if (!scorm?.isReady()) {
+      return
+    }
+
+    scorm.setValue('cmi.core.lesson_location', 'cover')
+    scorm.setValue('cmi.core.lesson_status', 'not attempted')
+    scorm.setValue('cmi.core.score.min', '0')
+    scorm.setValue('cmi.core.score.max', '100')
+    scorm.setValue('cmi.core.score.raw', '0')
+    scorm.setValue('cmi.core.exit', '')
+    scorm.setValue('cmi.suspend_data', '')
+    scorm.commit()
+  }
+
+  function resetAttemptUiState() {
+    setClockNow(Date.now())
+    setSelectedHotspotId(null)
+    setLobbyOverlay(null)
+    setDraggingAuthorHotspotId(null)
+    setAuthorMode(false)
+    setAuthorJsonPanelOpen(false)
+    setAuthorJsonCopied(false)
+    setAuthorSavedAt(null)
+    setAuthorSaveError('')
+    setPdfError('')
+    setPdfGenerating(false)
+    setSimState(createDefaultState())
+  }
+
+  function restartSimulation() {
+    clearAttemptStorage()
+    clearAttemptScormState()
+    resetAttemptUiState()
+  }
+
   useEffect(() => {
     return () => {
       startup.scorm.terminate()
     }
   }, [startup.scorm])
+
+  useEffect(() => {
+    clearAttemptStorage()
+    clearAttemptScormState()
+  }, [])
 
   useEffect(() => {
     if (timerDisabled || !simState.timerEndsAt) {
@@ -592,23 +506,6 @@ function App() {
     const intervalId = window.setInterval(updateRemainingTime, 1000)
     return () => window.clearInterval(intervalId)
   }, [simState.timerEndsAt, timerDisabled, requiredAssessmentsComplete])
-
-  useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, serializeLocalState(simState))
-  }, [simState])
-
-  useEffect(() => {
-    try {
-      if (timerDisabled || !simState.launched || !simState.timerEndsAt) {
-        window.sessionStorage.removeItem(TIMER_SESSION_KEY)
-        return
-      }
-
-      window.sessionStorage.setItem(TIMER_SESSION_KEY, String(simState.timerEndsAt))
-    } catch {
-      // Ignore sessionStorage write failures and continue with in-memory timer state.
-    }
-  }, [simState.launched, simState.timerEndsAt, timerDisabled])
 
   useEffect(() => {
     if (!authorJsonCopied) {
@@ -633,13 +530,15 @@ function App() {
     scorm.setValue('cmi.core.score.min', '0')
     scorm.setValue('cmi.core.score.max', '100')
     scorm.setValue('cmi.core.score.raw', String(scoreSummary.score))
-    scorm.setValue('cmi.core.exit', requiredAssessmentsComplete ? '' : 'suspend')
-    scorm.setValue('cmi.suspend_data', serializeSuspendData(simState))
+    scorm.setValue('cmi.core.exit', '')
+    scorm.setValue('cmi.suspend_data', '')
     scorm.commit()
   }, [displayPhase, lessonStatus, requiredAssessmentsComplete, scoreSummary.score, simState])
 
   useEffect(() => {
     const handleBeforeUnload = () => {
+      clearAttemptStorage()
+      clearAttemptScormState()
       scormRef.current?.commit()
       scormRef.current?.terminate()
     }
@@ -1033,15 +932,16 @@ function App() {
               </p>
             </article>
             <article>
-              <h2>SCORM Tracking</h2>
+              <h2>Restarting</h2>
               <p>
-                Progress saves to `cmi.suspend_data` in an LMS and to `localStorage` during local testing. Completed
-                room submissions are tracked automatically.
+                You may restart the simulation and complete it again at any time. When you exit or restart, your
+                current answers, feedback, progress, and results will be cleared. Each new attempt begins from the
+                start.
               </p>
             </article>
           </div>
           <div className="button-row">
-            <button type="button" className="ghost" onClick={() => setSimState(createDefaultState())}>
+            <button type="button" className="ghost" onClick={restartSimulation}>
               Back to Cover
             </button>
             <button type="button" onClick={launchSimulation}>
@@ -1080,6 +980,13 @@ function App() {
               <small>{simState.activeCaseId ? `Current room: Patient ${activeCase?.patientNumber}` : 'Lobby overview'}</small>
             </div>
           </div>
+          {simState.launched && (
+            <div className="dev-timer-row">
+              <button type="button" className="ghost dev-timer-button" onClick={restartSimulation}>
+                Restart Simulation
+              </button>
+            </div>
+          )}
           {timerResetEnabled && simState.launched && (
             <div className="dev-timer-row">
               <button type="button" className="ghost dev-timer-button" onClick={handleResetTimer}>
@@ -1238,6 +1145,7 @@ function App() {
                     <li>Use the Word document to take notes.</li>
                     <li>Submit diagnosis, supporting evidence, and rule-outs.</li>
                     <li>Complete any three patient assessments before time expires.</li>
+                    <li>Restarting begins a new attempt and clears previous answers, progress, and results.</li>
                   </ul>
                 </section>
               </>
@@ -1388,8 +1296,8 @@ function App() {
               <p className="eyebrow">Time Expired</p>
               <h2>Clinical Window Closed</h2>
               <p className="panel-copy">
-                The 2.5-hour timer has ended. Progress has been saved, including hotspot exploration and any submitted
-                patient assessments.
+                The 2.5-hour timer has ended. You may begin a new attempt at any time, and restarting will clear the
+                previous attempt before sending you back to the beginning.
               </p>
               <p className="score-line">
                 Assessments completed: <strong>{Math.min(completedRooms, REQUIRED_ASSESSMENTS)} / {REQUIRED_ASSESSMENTS}</strong>
