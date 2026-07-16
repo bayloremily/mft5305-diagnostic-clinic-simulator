@@ -566,8 +566,6 @@ function App() {
     learnerPassed,
     allRoomsComplete: requiredAssessmentsComplete,
   })
-  const showLobbyPdfPanel =
-    simState.launched && (displayPhase === 'lobby' || displayPhase === 'complete') && !simulationTimedOut
   const hasPanoramaOverlay =
     displayPhase === 'synopsis' ||
     lobbyOverlay === 'instructions' ||
@@ -1300,41 +1298,6 @@ function App() {
               </>
             )}
           </div>
-
-          {showLobbyPdfPanel && (
-            <section className="overlay-card lobby-pdf-panel">
-              <div className="lobby-pdf-copy">
-                <p className="eyebrow">Submission PDF</p>
-                <h2>Download Your Assessment PDF</h2>
-                <p className="panel-copy">
-                  {requiredAssessmentsComplete
-                    ? 'You have completed the required three patient assessments. Download the PDF containing your submitted responses.'
-                    : `Complete ${REQUIRED_ASSESSMENTS} patient assessments to enable the PDF download button.`}
-                </p>
-                <p className="score-line">
-                  Assessments completed:{' '}
-                  <strong>
-                    {Math.min(completedRooms, REQUIRED_ASSESSMENTS)} / {REQUIRED_ASSESSMENTS}
-                  </strong>
-                </p>
-              </div>
-              <div className="lobby-pdf-actions">
-                <button
-                  type="button"
-                  onClick={handleDownloadSubmissionPdf}
-                  disabled={!requiredAssessmentsComplete || pdfGenerating}
-                >
-                  {pdfGenerating ? 'Preparing PDF...' : 'Download Submission PDF'}
-                </button>
-                {!requiredAssessmentsComplete && (
-                  <p className="panel-copy pdf-helper-copy">
-                    Finish three submitted patient assessments before downloading.
-                  </p>
-                )}
-                {pdfError && <p className="error-note">{pdfError}</p>}
-              </div>
-            </section>
-          )}
 
           {displayPhase === 'room' && activeCase && activeCaseState && (
             <section className="overlay-card room-ui">
