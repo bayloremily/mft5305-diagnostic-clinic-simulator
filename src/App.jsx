@@ -12,8 +12,9 @@ const TOTAL_SECONDS = 2.5 * 60 * 60
 const REQUIRED_ASSESSMENTS = 3
 const DEV_DISABLE_TIMER = false
 const DEV_AUTHOR_MODE = false
-const DEV_SHOW_TIMER_RESET = true
+const DEV_SHOW_TIMER_RESET = false
 const STORAGE_KEY = 'diagnostic-clinic-simulator-state'
+const TIMER_SESSION_KEY = 'diagnostic-clinic-simulator-timer'
 const AUTHOR_STORAGE_KEY = 'diagnostic-clinic-simulator-author-hotspots'
 
 function getDeveloperToolsEnabled() {
@@ -157,7 +158,7 @@ function normalizeState(rawState) {
     launched: Boolean(rawState.launched),
     phase: allowedPhases.includes(rawState.phase) ? rawState.phase : baseState.phase,
     activeCaseId: caseIds.has(rawState.activeCaseId) ? rawState.activeCaseId : null,
-    timerEndsAt: Number.isFinite(rawState.timerEndsAt) ? rawState.timerEndsAt : null,
+    timerEndsAt: null,
     cases: Object.fromEntries(
       casesData.cases.map((caseItem) => [
         caseItem.id,
@@ -176,12 +177,45 @@ function loadLocalState() {
   }
 }
 
+function loadSessionTimer() {
+  try {
+    const savedValue = window.sessionStorage.getItem(TIMER_SESSION_KEY)
+    const parsedValue = savedValue ? Number(savedValue) : null
+    return Number.isFinite(parsedValue) ? parsedValue : null
+  } catch {
+    return null
+  }
+}
+
+function createInitialSimState(suspendedState) {
+  const baseState = suspendedState ?? loadLocalState()
+  const sessionTimerEndsAt = loadSessionTimer()
+  const hasActiveLaunch = baseState.launched
+  const nextTimerEndsAt = DEV_DISABLE_TIMER
+    ? null
+    : sessionTimerEndsAt ?? (hasActiveLaunch ? Date.now() + TOTAL_SECONDS * 1000 : null)
+  const timedOutWithoutSessionTimer = sessionTimerEndsAt === null && baseState.phase === 'timeout'
+
+  return {
+    ...baseState,
+    phase: timedOutWithoutSessionTimer ? 'lobby' : baseState.phase,
+    activeCaseId: timedOutWithoutSessionTimer ? null : baseState.activeCaseId,
+    timerEndsAt: nextTimerEndsAt,
+  }
+}
+
+function serializeLocalState(state) {
+  return JSON.stringify({
+    ...state,
+    timerEndsAt: null,
+  })
+}
+
 function serializeSuspendData(state) {
   return JSON.stringify({
     l: state.launched ? 1 : 0,
     p: state.phase,
     a: state.activeCaseId,
-    t: state.timerEndsAt,
     c: Object.fromEntries(
       Object.entries(state.cases).map(([caseId, caseState]) => [
         caseId,
@@ -211,7 +245,6 @@ function deserializeSuspendData(value) {
       launched: Boolean(parsed.l),
       phase: parsed.p,
       activeCaseId: parsed.a,
-      timerEndsAt: parsed.t,
       cases: Object.fromEntries(
         casesData.cases.map((caseItem) => {
           const source = parsed.c?.[caseItem.id] ?? {}
@@ -459,14 +492,16 @@ function App() {
   const [startup] = useState(() => {
     const scorm = createScormRuntime()
     const connected = scorm.initialize()
+    const suspendedState = connected ? deserializeSuspendData(scorm.getValue('cmi.suspend_data')) : null
+
     return {
       scorm,
       connected,
-      suspendedState: connected ? deserializeSuspendData(scorm.getValue('cmi.suspend_data')) : null,
+      suspendedState,
     }
   })
   const scormRef = useRef(startup.scorm)
-  const [simState, setSimState] = useState(() => startup.suspendedState ?? loadLocalState())
+  const [simState, setSimState] = useState(() => createInitialSimState(startup.suspendedState))
   const [clockNow, setClockNow] = useState(() => Date.now())
   const [selectedHotspotId, setSelectedHotspotId] = useState(null)
   const [lobbyOverlay, setLobbyOverlay] = useState(null)
@@ -561,8 +596,21 @@ function App() {
   }, [simState.timerEndsAt, timerDisabled, requiredAssessmentsComplete])
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(simState))
+    window.localStorage.setItem(STORAGE_KEY, serializeLocalState(simState))
   }, [simState])
+
+  useEffect(() => {
+    try {
+      if (timerDisabled || !simState.launched || !simState.timerEndsAt) {
+        window.sessionStorage.removeItem(TIMER_SESSION_KEY)
+        return
+      }
+
+      window.sessionStorage.setItem(TIMER_SESSION_KEY, String(simState.timerEndsAt))
+    } catch {
+      // Ignore sessionStorage write failures and continue with in-memory timer state.
+    }
+  }, [simState.launched, simState.timerEndsAt, timerDisabled])
 
   useEffect(() => {
     if (!authorJsonCopied) {
@@ -637,6 +685,8 @@ function App() {
     setClockNow(nextNow)
     setSimState((currentState) => ({
       ...currentState,
+      activeCaseId: currentState.phase === 'timeout' ? null : currentState.activeCaseId,
+      phase: currentState.phase === 'timeout' ? 'lobby' : currentState.phase,
       timerEndsAt: nextNow + TOTAL_SECONDS * 1000,
     }))
   }
