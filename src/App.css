@@ -246,60 +246,17 @@ textarea {
   min-height: 30rem;
   border-radius: 30px;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.25), transparent 35%),
-    linear-gradient(160deg, #173a34 0%, #20483f 45%, #8c6d1f 100%);
+  background: rgba(14, 28, 24, 0.12);
 }
 
-.cover-stage-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.11) 1px, transparent 1px);
-  background-size: 2.4rem 2.4rem;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1), transparent 88%);
-}
-
-.cover-monitor {
-  position: absolute;
-  right: 2rem;
-  top: 2.2rem;
-  width: min(18rem, 70%);
-  aspect-ratio: 1 / 0.74;
-  border-radius: 24px;
-  padding: 0.85rem;
-  background: rgba(14, 28, 24, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.cover-monitor-screen {
-  height: 100%;
-  border-radius: 18px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.35rem;
-  color: #f4fbf8;
-  background:
-    radial-gradient(circle at top, rgba(141, 203, 185, 0.45), transparent 40%),
-    linear-gradient(180deg, rgba(7, 18, 15, 0.92), rgba(14, 36, 31, 0.95));
-}
-
-.cover-monitor-image-frame {
-  padding: 0;
-  overflow: hidden;
-}
-
-.cover-monitor-image {
+.cover-stage-image {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
+  object-position: center;
 }
 
-.cover-monitor-screen span,
 .info-grid span,
 .checklist-strip span,
 .mini-card span,
@@ -310,31 +267,6 @@ textarea {
   display: block;
   color: var(--muted);
   font-size: 0.84rem;
-}
-
-.cover-monitor-screen span,
-.cover-monitor-screen small {
-  color: rgba(244, 251, 248, 0.76);
-}
-
-.cover-monitor-screen strong {
-  font-size: 1.3rem;
-}
-
-.cover-pillars {
-  position: absolute;
-  inset: auto 0 0;
-  display: flex;
-  justify-content: space-evenly;
-  padding: 0 2rem 2rem;
-}
-
-.cover-pillars div {
-  width: 22%;
-  height: 11rem;
-  border-radius: 20px 20px 0 0;
-  background: linear-gradient(180deg, rgba(250, 252, 251, 0.3), rgba(12, 22, 19, 0.1));
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .instruction-card {

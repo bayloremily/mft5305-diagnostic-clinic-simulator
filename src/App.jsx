@@ -871,17 +871,7 @@ function App() {
             </div>
           </div>
           <div className="cover-stage">
-            <div className="cover-stage-grid" />
-            <div className="cover-monitor">
-              <div className="cover-monitor-screen cover-monitor-image-frame">
-                <img src={scenarioCardImage} alt="eLearning Scenario Card" className="cover-monitor-image" />
-              </div>
-            </div>
-            <div className="cover-pillars">
-              <div />
-              <div />
-              <div />
-            </div>
+            <img src={scenarioCardImage} alt="Illustrated eLearning scenario card preview" className="cover-stage-image" />
           </div>
         </section>
       </main>
