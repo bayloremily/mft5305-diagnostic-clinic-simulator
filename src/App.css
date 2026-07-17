@@ -287,6 +287,18 @@ textarea {
     linear-gradient(180deg, rgba(7, 18, 15, 0.92), rgba(14, 36, 31, 0.95));
 }
 
+.cover-monitor-image-frame {
+  padding: 0;
+  overflow: hidden;
+}
+
+.cover-monitor-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 .cover-monitor-screen span,
 .info-grid span,
 .checklist-strip span,
@@ -639,6 +651,11 @@ textarea {
   z-index: 20;
 }
 
+.panorama-overlay-backdrop.is-prelaunch {
+  background: rgba(36, 48, 46, 0.42);
+  backdrop-filter: grayscale(0.35) blur(8px);
+}
+
 .panorama-overlay {
   position: absolute;
   z-index: 30;
@@ -703,8 +720,51 @@ textarea {
 
 .canvas-card.has-active-overlay .panorama-overlay,
 .canvas-card.has-active-overlay .panorama-overlay-backdrop,
-.canvas-card.has-active-overlay .overlay-card.is-panorama-modal {
+.canvas-card.has-active-overlay .overlay-card.is-panorama-modal,
+.canvas-card.has-active-overlay .prelaunch-panel-shell {
   pointer-events: auto;
+}
+
+.prelaunch-panel-shell {
+  position: absolute;
+  inset: 1rem;
+  z-index: 30;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+}
+
+.prelaunch-panel {
+  width: min(34rem, 100%);
+}
+
+.prelaunch-panel-wide {
+  width: min(64rem, 100%);
+}
+
+.prelaunch-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.prelaunch-info-grid div {
+  border-radius: 22px;
+  background: rgba(245, 249, 246, 0.92);
+  border: 1px solid rgba(25, 58, 48, 0.08);
+  padding: 1rem;
+}
+
+.prelaunch-info-grid h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+.prelaunch-info-grid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
 }
 
 .tablet-frame {
@@ -983,6 +1043,7 @@ textarea {
   }
 
   .status-cluster,
+  .prelaunch-info-grid,
   .instruction-grid,
   .info-grid,
   .checklist-strip,
@@ -1001,6 +1062,12 @@ textarea {
 
   .overlay-card.is-panorama-modal {
     inset: 0.75rem;
+  }
+
+  .prelaunch-panel-shell {
+    inset: 0.75rem;
+    align-content: start;
+    overflow: auto;
   }
 
   .tablet-frame {
